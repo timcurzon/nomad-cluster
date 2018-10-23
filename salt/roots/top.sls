@@ -1,4 +1,4 @@
 # salt (root) top 
 base:
   '*':
-    - default
+    - nomad
