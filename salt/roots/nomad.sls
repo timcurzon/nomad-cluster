@@ -7,7 +7,7 @@ download nomad:
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/nomad
 
-post download:
+post nomad download:
   cmd.run:
     - name: chmod a+x /usr/local/sbin/nomad
     - onchanges:

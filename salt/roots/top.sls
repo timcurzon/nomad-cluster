@@ -1,4 +1,6 @@
-# salt (root) top 
 base:
   '*':
+    - test
+    - networking
+    - consul
     - nomad

@@ -14,13 +14,18 @@ Vagrant.configure("2") do |config|
 
   (1..1).each do |i|
     config.vm.define "node-#{i}" do |node|
-      node.vm.hostname = "node-#{i}" # Minion will use this as ID for now
+
+      node.vm.hostname = "node-#{i}" # Salt minion will use this for ID
+
+      #node.vm.network "public_network"
+      #node.vm.network "private_network", ip: "172.16.0.#{i}"
+
       node.vm.provision :salt do |salt|
         salt.masterless = true
-        # salt.minion_id = "minion-#{i}" # Not working, bug?
         salt.minion_config = "salt/minion"
         salt.run_highstate = true
       end
+
     end
   end
 end
