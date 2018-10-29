@@ -14,12 +14,11 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "salt/roots/", "/srv/salt"
   config.vm.synced_folder "salt/pillar/", "/srv/pillar"
 
-  (1..1).each do |i|
+  (1..2).each do |i|
     config.vm.define "node-#{i}" do |node|
 
       node.vm.hostname = "node-#{i}" # Salt minion will use this for ID
-
-      #node.vm.network "private_network", ip: "172.16.0.#{i}"
+      node.vm.network "private_network", ip: "172.16.0.#{i}"
 
       node.vm.provision :salt do |salt|
         salt.masterless = true
