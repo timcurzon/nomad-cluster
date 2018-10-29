@@ -8,9 +8,9 @@
 ## System setup
 
 1. Networking
-  - Private backend network
-  - Public frontend network
-  - Test inter node connectivity over private network
+  - Public frontend network ✔
+  - Private backend network (172.16.0.0) ✔
+  - Test inter node connectivity over private network ✔
   - Fan networking setup
 2. DNSMasq (investigate needs)
 
