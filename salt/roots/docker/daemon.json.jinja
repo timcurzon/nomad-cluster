@@ -1,0 +1,11 @@
+{%- set networkPieces = pillar['fan overlay cidr'].split('.') -%}
+{%- set bridgeName = 'fan-' ~ networkPieces[0] ~ '-' ~ networkPieces[1] -%}
+{%- set dockerCIDR = networkPieces[0] ~ '.' ~ networkPieces[1]  ~ '.' ~ pillar['cluster index'] ~ '.0/24' -%}
+{%- set backendIP = (pillar['backend network cidr']|replace(".0/", '.' ~ pillar['cluster index'] ~ '/')).split('/')[0] -%}
+{
+  "mtu": 1450,
+  "bridge": "{{ bridgeName }}",
+  "fixed-cidr": "{{ dockerCIDR }}",
+  "dns": ["{{ backendIP }}"],
+  "live-restore": true
+}

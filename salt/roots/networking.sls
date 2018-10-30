@@ -1,6 +1,7 @@
-# NOTE: Commented Jinja template markup {# #} should be changed to {{ }}
+# NOTE: Commented Jinja template markup {# #} should also be uncommented
 
 # Uncomment to configure the frontend (public) interface if required
+# Currently this is configured via Vagrant...
 #frontend-network:
 #  network.managed:
 #    - name: [dev-logical-name]
@@ -15,6 +16,7 @@
 #    #    - [dns-ip-n]
 
 # Uncomment to configure the backend (private) interface if required
+# Currently this is configured via Vagrant...
 #backend-network:
 #  network.managed:
 #    - name: [dev-logical-name]
@@ -34,8 +36,7 @@ fan-networking:
     - group: root
     - mode: 644
 
-# Uncomment once fan networking installed
-#fan-network-refresh:
-#  cmd.run:
-#    - name: fanctl up -a
-#    - unless: fanctl show | grep "fan-.*{# pillar['fan overlay cidr'] #}.*enable"
+fan-network-refresh:
+  cmd.run:
+    - name: fanctl up -a
+    - unless: fanctl show | grep "fan-.*{# pillar['fan overlay cidr'] #}.*enable"
