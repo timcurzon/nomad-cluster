@@ -1,0 +1,2 @@
+# Underlay      Overlay      Flags
+{{ pillar['backend network cidr'].split('/')[0] ~ '/24' }}  {{ pillar['fan overlay cidr'] }}  --enable
