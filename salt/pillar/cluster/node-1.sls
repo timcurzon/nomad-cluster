@@ -5,3 +5,4 @@ cluster index: 1
 # is static to provide a more consistent behaviour during 'apply' because
 # there is less relience on grain data
 #frontend IP address: 192.168.1.51
+frontend IP address: 172.16.0.1

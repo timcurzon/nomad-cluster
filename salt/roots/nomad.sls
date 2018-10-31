@@ -1,4 +1,4 @@
-download nomad:
+nomad install:
   archive.extracted:
     - name: /usr/local/sbin
     - source: https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip
@@ -7,9 +7,9 @@ download nomad:
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/nomad
 
-post nomad download:
+nomad post download:
   cmd.run:
     - name: chmod a+x /usr/local/sbin/nomad
     - onchanges:
-      - archive: download nomad
+      - archive: nomad install
   

@@ -1,4 +1,4 @@
-download consul:
+consul install:
   archive.extracted:
     - name: /usr/local/sbin
     - source: https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
@@ -7,9 +7,9 @@ download consul:
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/consul
 
-post consul download:
+consul post install:
   cmd.run:
     - name: chmod a+x /usr/local/sbin/consul
     - onchanges:
-      - archive: download consul
+      - archive: consul install
   
