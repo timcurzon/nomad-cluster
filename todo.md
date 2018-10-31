@@ -14,14 +14,15 @@ DNSMasq notes:
   * 'this' local names (this, front.this, back.this)
 
 1. Networking
-  - Public frontend network ✔
-  - Private backend network (172.16.0.0) ✔
+  - Public frontend network X
+  - 'Private' frontend network (172.16.0.0) ✔
+  - 'Private' backend network (172.30.0.0) ✔
   - Test inter node connectivity over private network ✔
   - Fan networking setup ✔
 2. DNSMasq setup
-  - Basic config
-  - Service domain
-  - 'this' local names
+  - Basic config ✔
+  - Service domain ✔
+  - 'this' local names ✔
 
 ## Tool installation
 
