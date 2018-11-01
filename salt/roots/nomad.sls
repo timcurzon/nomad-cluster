@@ -7,9 +7,113 @@ nomad install:
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/nomad
 
-nomad post download:
+nomad after install:
   cmd.run:
     - name: chmod a+x /usr/local/sbin/nomad
     - onchanges:
       - archive: nomad install
   
+nomad directory exists:
+  file.directory:
+    - name: /var/nomad
+    - user: root
+    - group: root
+    - mode: 755
+    - file_mode: 644
+    - force: True
+
+nomad systemd reload:
+  cmd.run:
+    - name: systemctl daemon-reload
+    - onchanges:
+      - file: nomad client startup script
+{% if pillar['nomad server'] %}
+      - file: nomad server startup script
+{% endif %}
+
+# Note, nomad is deliberately NOT set to restart on update because this causes 
+# all sorts of things to go bang and lots of containers to try (and often fail)
+# to restart.
+#
+# If nomad has been updated then you need to drain the node, restart nomad 
+# manually via systemctl and then allow allocations back onto it.
+
+# Client config
+nomad client config:
+  file.managed:
+    - name: /etc/nomad/client/client.json
+    - source: /srv/salt/nomad/client.json.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad client startup script:
+  file.managed:
+    - name: /etc/systemd/system/nomad-client.service
+    - source: /srv/salt/nomad/nomad-client.service
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad client service:
+  service.running:
+    - name: nomad-client
+    - enable: True
+    - require:
+      - file: nomad directory exists
+
+nomad client config reload:
+  cmd.run:
+    - name: systemctl reload nomad-client
+    - onchanges:
+      - file: nomad client config
+
+nomad client restart:
+  cmd.run:
+    - name: systemctl restart nomad-client
+    - onchanges:
+      - cmd: nomad after install
+
+# Server config
+{% if pillar['nomad server'] %}
+nomad server config:
+  file.managed:
+    - name: /etc/nomad/server/server.json
+    - source: /srv/salt/nomad/server.json.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad server startup script:
+  file.managed:
+    - name: /etc/systemd/system/nomad-server.service
+    - source: /srv/salt/nomad/nomad-server.service
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad server service:
+  service.running:
+    - name: nomad-server
+    - enable: True
+    - require:
+      - file: nomad directory exists
+
+nomad server config reload:
+  cmd.run:
+    - name: systemctl reload nomad-server
+    - onchanges:
+      - file: nomad server config
+
+nomad server restart:
+  cmd.run:
+    - name: systemctl restart nomad-server
+    - onchanges:
+      - cmd: nomad after install
+{% endif %}

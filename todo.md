@@ -14,7 +14,7 @@ DNSMasq notes:
   * 'this' local names (this, front.this, back.this)
 
 1. Networking
-  - Public frontend network X
+  - Public frontend network ✘
   - 'Private' frontend network (172.16.0.0) ✔
   - 'Private' backend network (172.30.0.0) ✔
   - Test inter node connectivity over private network ✔
@@ -30,12 +30,18 @@ DNSMasq notes:
 2. Docker Compose ✔
 3. Nomad
   - Binary install ✔
-  - Config files
-  - systemctl client service
-  - systemctl server service
+  - Config files ✔
+  - systemctl client service ✔
+  - systemctl server service ✔
 4. Consul
   - Binary install ✔
   - Config files
   - systemctl service
   - Healthchecks
   - Scripts
+5. Vault
+  - Check reqs
+  - Re-enable in nomad server config
+6. System test
+  - Consul + Vault
+  - Nomad

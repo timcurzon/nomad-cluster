@@ -1,0 +1,34 @@
+{%- set backendIP = (pillar['backend network cidr']|replace(".0/", '.' ~ pillar['cluster index'] ~ '/')).split('/')[0] %}
+
+datacenter = "cluster-dev"
+data_dir = "/var/nomad/"
+leave_on_interrupt = true
+enable_debug = false
+
+bind_addr = "{{ backendIP }}"
+
+advertise {
+	http = "{{ backendIP }}"
+	rpc = "{{ backendIP }}"
+	serf = "{{ backendIP }}"
+}
+
+consul {
+	# This MUST be a consistent consul agent address and it makes sense to use the local one
+	address = "front.this.node.cluster:8500"
+}
+
+server {
+	enabled = true
+	bootstrap_expect = 3
+	num_schedulers = 2
+	rejoin_after_leave = true
+	encrypt = "8sfUDokS8ehEsfbj9ysdaf=="
+}
+
+# TODO: re-enable
+vault {
+	enabled = false
+	address = "http://active.vault.service.cluster:8200"
+	token = "5681c566-f814-eedb-d3a4-3c59c21e52a8"
+}

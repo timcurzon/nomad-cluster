@@ -1,0 +1,14 @@
+[Unit]
+Description=nomad server
+Requires=consul.service
+
+[Service]
+ExecStart=/usr/local/sbin/nomad agent -config=/etc/nomad/server
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+KillMode=process
+Restart=on-failure
+RestartSec=50s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+datacenter = "cluster-dev"
+data_dir = "/var/nomad/"
+leave_on_interrupt = true
+enable_debug = false
+
+bind_addr = "{{ pillar['frontend IP address'] }}"
+
+advertise {
+	http = "{{ pillar['frontend IP address'] }}"
+	rpc = "{{ pillar['frontend IP address'] }}"
+	serf = "{{ pillar['frontend IP address'] }}"
+}
+
+consul {
+	# This MUST be a consistent consul agent address and it makes sense to use the local one
+	address = "front.this.node.cluster:8500"
+}
+
+client {
+	enabled = true
+}

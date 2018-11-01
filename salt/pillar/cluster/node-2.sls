@@ -6,3 +6,13 @@ cluster index: 2
 # there is less relience on grain data
 #frontend IP address: 192.168.1.52
 frontend IP address: 172.16.0.2
+
+# Meta labels to set on the Nomad client
+nomad meta:
+#  labelname: labelvalue
+
+# Control whether a node is a nomad server node
+nomad server: True
+
+# Control whether a node is a consul server node
+consul server: True
