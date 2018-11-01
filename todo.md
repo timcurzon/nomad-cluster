@@ -35,10 +35,9 @@ DNSMasq notes:
   - systemctl server service ✔
 4. Consul
   - Binary install ✔
-  - Config files
-  - systemctl service
-  - Healthchecks
-  - Scripts
+  - Config files ✔
+  - systemctl service ✔
+  - Healthchecks + scripts ✔
 5. Vault
   - Check reqs
   - Re-enable in nomad server config
