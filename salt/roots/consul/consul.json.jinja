@@ -1,0 +1,35 @@
+{%- set serverList = [] -%}
+{%- for consulIP in ["172.16.0.1", "172.16.0.2", "172.16.0.3"] if not consulIP == pillar['frontend IP address'] -%}
+	{%- do serverList.append(consulIP) -%}
+{%- endfor -%}
+
+{
+	"datacenter": "cluster-dev",
+	"data_dir": "/var/consul",
+	"server": {{ 'true' if pillar['consul server'] else 'false' }},
+	"rejoin_after_leave": true,
+	"retry_join": [{{ '"' ~ serverList|join('","') ~ '"' }}],
+	"retry_max": 20,
+{% if pillar['consul server'] %}
+	"bootstrap_expect": 3,
+{% endif %}
+	"skip_leave_on_interrupt": false,
+	"encrypt": "{{ pillar['consul gossip encryption key'] }}",
+	"client_addr": "{{ pillar['frontend IP address'] }}",
+	"bind_addr": "{{ pillar['frontend IP address'] }}",
+	"dns_config": {
+		"allow_stale": true,
+		"max_stale": "1s"
+	},
+	"domain": "cluster",
+	"enable_script_checks": true,
+	"performance": {
+		"raft_multiplier": 1
+	},
+	"http_config": {
+		"response_headers": {
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "GET, PUT, HEAD, POST, DELETE, OPTIONS"
+		}
+	}
+}

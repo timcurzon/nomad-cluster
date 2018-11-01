@@ -7,6 +7,12 @@ nomad install:
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/nomad
 
+# Deliberate if_missing means you have to manually remove nomad from /usr/local/sbin
+# before it will be updated. This prevents accidental update of all cluster servers at
+# once which means all sorts of things go bang and lots of containers to try (and
+# often fail) to restart. If Nomad has been updated then you need to drain the node,
+# restart nomad manually via systemctl and then allow allocations back onto it.
+
 nomad after install:
   cmd.run:
     - name: chmod a+x /usr/local/sbin/nomad
@@ -22,7 +28,7 @@ nomad directory exists:
     - file_mode: 644
     - force: True
 
-nomad systemd reload:
+nomad systemd daemon reload:
   cmd.run:
     - name: systemctl daemon-reload
     - onchanges:
@@ -30,13 +36,6 @@ nomad systemd reload:
 {% if pillar['nomad server'] %}
       - file: nomad server startup script
 {% endif %}
-
-# Note, nomad is deliberately NOT set to restart on update because this causes 
-# all sorts of things to go bang and lots of containers to try (and often fail)
-# to restart.
-#
-# If nomad has been updated then you need to drain the node, restart nomad 
-# manually via systemctl and then allow allocations back onto it.
 
 # Client config
 nomad client config:

@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "id": "diskUse",
+      "name": "Disk Usage",
+      "args": ["/etc/consul/scripts/disk-usage.sh", "90"],
+      "interval": "5m",
+      "timeout": "5s",
+      "status": "passing"
+    },
+    {
+      "id": "loadAverage",
+      "name": "Load Average",
+      "args": ["/etc/consul/scripts/load-avg.sh", "90"],
+      "interval": "1m",
+      "timeout": "5s",
+      "status": "passing"
+    }
+  ]
+}

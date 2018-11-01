@@ -1,0 +1,17 @@
+[Unit]
+Description=consul agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=consul
+Group=consul
+ExecStart=/usr/local/sbin/consul agent -config-dir=/etc/consul
+ExecReload=/usr/local/sbin/consul reload
+KillSignal=SIGINT
+KillMode=process
+Restart=on-failure
+RestartSec=50s
+
+[Install]
+WantedBy=multi-user.target
