@@ -105,5 +105,5 @@ consul config reload:
 consul restart:
   cmd.run:
     - name: systemctl restart consul
-    - onchange:
+    - onchanges:
       - cmd: consul after install

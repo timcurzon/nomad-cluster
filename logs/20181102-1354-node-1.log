@@ -1,0 +1,2483 @@
+Bringing machine 'node-1' up with 'virtualbox' provider...
+==> node-1: You assigned a static IP ending in ".1" to this machine.
+==> node-1: This is very often used by the router and can cause the
+==> node-1: network to not work properly. If the network doesn't work
+==> node-1: properly, try changing this IP.
+==> node-1: You assigned a static IP ending in ".1" to this machine.
+==> node-1: This is very often used by the router and can cause the
+==> node-1: network to not work properly. If the network doesn't work
+==> node-1: properly, try changing this IP.
+==> node-1: Importing base box 'ubuntu/bionic64'...
+==> node-1: Matching MAC address for NAT networking...
+==> node-1: You assigned a static IP ending in ".1" to this machine.
+==> node-1: This is very often used by the router and can cause the
+==> node-1: network to not work properly. If the network doesn't work
+==> node-1: properly, try changing this IP.
+==> node-1: You assigned a static IP ending in ".1" to this machine.
+==> node-1: This is very often used by the router and can cause the
+==> node-1: network to not work properly. If the network doesn't work
+==> node-1: properly, try changing this IP.
+==> node-1: Checking if box 'ubuntu/bionic64' is up to date...
+==> node-1: A newer version of the box 'ubuntu/bionic64' for provider 'virtualbox' is
+==> node-1: available! You currently have version '20181030.0.0'. The latest is version
+==> node-1: '20181101.0.0'. Run `vagrant box update` to update.
+==> node-1: Setting the name of the VM: nomad-devcluster_node-1_1541166115819_55665
+==> node-1: Clearing any previously set network interfaces...
+==> node-1: Preparing network interfaces based on configuration...
+    node-1: Adapter 1: nat
+    node-1: Adapter 2: hostonly
+    node-1: Adapter 3: hostonly
+==> node-1: Forwarding ports...
+    node-1: 22 (guest) => 2222 (host) (adapter 1)
+==> node-1: Running 'pre-boot' VM customizations...
+==> node-1: Booting VM...
+==> node-1: Waiting for machine to boot. This may take a few minutes...
+    node-1: SSH address: 127.0.0.1:2222
+    node-1: SSH username: vagrant
+    node-1: SSH auth method: private key
+    node-1: Warning: Connection reset. Retrying...
+    node-1: Warning: Remote connection disconnect. Retrying...
+    node-1: Warning: Connection reset. Retrying...
+    node-1: 
+    node-1: Vagrant insecure key detected. Vagrant will automatically replace
+    node-1: this with a newly generated keypair for better security.
+    node-1: 
+    node-1: Inserting generated public key within guest...
+    node-1: Removing insecure key from the guest if it's present...
+    node-1: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> node-1: Machine booted and ready!
+==> node-1: Checking for guest additions in VM...
+==> node-1: Setting hostname...
+==> node-1: Configuring and enabling network interfaces...
+==> node-1: Mounting shared folders...
+    node-1: /vagrant => /Volumes/Sites/personal/docker-apparatus/x86-64/nomad-devcluster
+    node-1: /srv/salt => /Volumes/Sites/personal/docker-apparatus/x86-64/nomad-devcluster/salt/roots
+    node-1: /srv/pillar => /Volumes/Sites/personal/docker-apparatus/x86-64/nomad-devcluster/salt/pillar
+==> node-1: Running provisioner: salt...
+Copying salt minion config to vm.
+Checking if salt-minion is installed
+salt-minion was not found.
+Checking if salt-call is installed
+salt-call was not found.
+Bootstrapping Salt... (this may take a while)
+Salt successfully configured and installed!
+run_overstate set to false. Not running state.overstate.
+Calling state.highstate... (this may take a while)
+
+
+
+
+
+The following SSH command responded with a non-zero exit status.
+Vagrant assumes that this means the command failed!
+
+salt-call state.highstate --retcode-passthrough --local --log-level=debug --no-color 
+
+Stdout from the command:
+
+local:
+----------
+          ID: pillar test
+    Function: cmd.run
+        Name: touch /pillar-cluster-index-1
+      Result: True
+     Comment: Command "touch /pillar-cluster-index-1" run
+     Started: 13:43:36.339036
+    Duration: 10.924 ms
+     Changes:   
+              ----------
+              pid:
+                  4650
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: fan-networking
+    Function: pkg.installed
+        Name: ubuntu-fan
+      Result: True
+     Comment: The following packages were installed/updated: ubuntu-fan
+     Started: 13:43:38.527677
+    Duration: 10790.166 ms
+     Changes:   
+              ----------
+              bridge-utils:
+                  ----------
+                  new:
+                      1.5-15ubuntu1
+                  old:
+              ubuntu-fan:
+                  ----------
+                  new:
+                      0.12.10
+                  old:
+----------
+          ID: fan-networking
+    Function: file.managed
+        Name: /etc/network/fan
+      Result: True
+     Comment: File /etc/network/fan updated
+     Started: 13:43:49.336667
+    Duration: 142.529 ms
+     Changes:   
+              ----------
+              diff:
+                  --- 
+                  +++ 
+                  @@ -1,39 +1,2 @@
+                  -# FAN overlay network map.
+                  -
+                  -# The FAN is a very fast overlay network system for docker in cloud
+                  -# environments with limited IP addresses. The FAN multiplies host
+                  -# addresses by mapping them to a larger overlay network. It eliminates
+                  -# the need for a central database and myriad tunnels by mapping
+                  -# addresses mathematically.
+                  -
+                  -# This map file specifies the list of maps which can be enabled in
+                  -# /etc/network/interfaces or using the "fanctl config" command. See also
+                  -# fanatic(1) for a tool that will configure docker to use your fans.
+                  -# The only absolute rule is that all your participating machines use
+                  -# the same mapping for active fans.
+                  -
+                  -# The map translates a local address range to an overlay range.
+                  -
+                  -# RFC1918 - we recommend you use these for easy interop with other
+                  -# FAN users on small private networks. They provide around 250 IP's
+                  -# per 192.168.0.0/16 address, or 16 per 172.16.0.0/12 address.
+                  -
+                  -# local          overlay       options
+                  -192.168.0.0/16   250.0.0.0/8
+                  -172.16.0.0/12    251.0.0.0/8
+                  -
+                  -# RFC1918 VPC - we recommend you use the higher ranges of 10.0.0.0/8
+                  -# for your docker-centric VPC. This example provides 1,000 IP's per
+                  -# base IP in 10.254.0.0/16.
+                  -
+                  -10.254.0.0/16    252.0.0.0/8
+                  -10.254.0.0/16    253.0.0.0/8
+                  -10.254.0.0/16    254.0.0.0/8
+                  -
+                  -# CUSTOM
+                  -#
+                  -# You can map large ranges onto your own, smaller, ranges for address
+                  -# space expansion purposes. We recommend you adopt a common mapping for
+                  -# your entire institution.
+                  -
+                  -# local          overlay
+                  +# Underlay      Overlay      Flags
+                  +172.30.0.0/24  172.31.0.0/16  --enable
+----------
+          ID: fan-network-refresh
+    Function: cmd.run
+        Name: fanctl up -a
+      Result: True
+     Comment: Command "fanctl up -a" run
+     Started: 13:43:49.483214
+    Duration: 420.825 ms
+     Changes:   
+              ----------
+              pid:
+                  5536
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: dnsmasq package
+    Function: pkg.installed
+        Name: dnsmasq
+      Result: True
+     Comment: The following packages were installed/updated: dnsmasq
+     Started: 13:43:49.930282
+    Duration: 8291.492 ms
+     Changes:   
+              ----------
+              dnsmasq:
+                  ----------
+                  new:
+                      2.79-1
+                  old:
+----------
+          ID: dnsmasq config basic
+    Function: file.managed
+        Name: /etc/dnsmasq.d/basics
+      Result: True
+     Comment: File /etc/dnsmasq.d/basics updated
+     Started: 13:43:58.237433
+    Duration: 49.68 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: dnsmasq config consul
+    Function: file.managed
+        Name: /etc/dnsmasq.d/consul
+      Result: True
+     Comment: File /etc/dnsmasq.d/consul updated
+     Started: 13:43:58.287376
+    Duration: 9.77 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: dnsmasq config this
+    Function: file.managed
+        Name: /etc/dnsmasq.d/this
+      Result: True
+     Comment: File /etc/dnsmasq.d/this updated
+     Started: 13:43:58.297408
+    Duration: 12.086 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: dnsmasq service
+    Function: service.running
+        Name: dnsmasq
+      Result: True
+     Comment: Service restarted
+     Started: 13:43:59.977681
+    Duration: 162.588 ms
+     Changes:   
+              ----------
+              dnsmasq:
+                  True
+----------
+          ID: consul install
+    Function: archive.extracted
+        Name: /usr/local/sbin
+      Result: True
+     Comment: https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip extracted to /usr/local/sbin/, due to absence of one or more files/dirs
+     Started: 13:44:00.146103
+    Duration: 5333.722 ms
+     Changes:   
+              ----------
+              extracted_files:
+                  - consul
+----------
+          ID: consul after install
+    Function: cmd.run
+        Name: chmod a+x /usr/local/sbin/consul
+      Result: True
+     Comment: Command "chmod a+x /usr/local/sbin/consul" run
+     Started: 13:44:05.486996
+    Duration: 33.181 ms
+     Changes:   
+              ----------
+              pid:
+                  6038
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: consul config
+    Function: file.managed
+        Name: /etc/consul/consul.json
+      Result: True
+     Comment: File /etc/consul/consul.json updated
+     Started: 13:44:05.520500
+    Duration: 88.387 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: consul node healthcheck scripts
+    Function: file.copy
+        Name: /etc/consul/scripts
+      Result: True
+     Comment: Copied "/srv/salt/consul/scripts" to "/etc/consul/scripts"
+     Started: 13:44:05.609480
+    Duration: 15.866 ms
+     Changes:   
+              ----------
+              /etc/consul/scripts:
+                  /srv/salt/consul/scripts
+----------
+          ID: consul node healthcheck
+    Function: file.managed
+        Name: /etc/consul/node-healthchecks.json
+      Result: True
+     Comment: File /etc/consul/node-healthchecks.json updated
+     Started: 13:44:05.626591
+    Duration: 22.972 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: consul startup script
+    Function: file.managed
+        Name: /etc/systemd/system/consul.service
+      Result: True
+     Comment: File /etc/systemd/system/consul.service updated
+     Started: 13:44:05.649866
+    Duration: 23.623 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: consul group
+    Function: group.present
+        Name: consul
+      Result: True
+     Comment: New group consul created
+     Started: 13:44:05.676754
+    Duration: 196.328 ms
+     Changes:   
+              ----------
+              gid:
+                  999
+              members:
+              name:
+                  consul
+              passwd:
+                  x
+----------
+          ID: consul user
+    Function: user.present
+        Name: consul
+      Result: True
+     Comment: New user consul created
+     Started: 13:44:05.878048
+    Duration: 130.808 ms
+     Changes:   
+              ----------
+              fullname:
+              gid:
+                  999
+              groups:
+                  - consul
+              home:
+                  /var/consul
+              homephone:
+              name:
+                  consul
+              other:
+              passwd:
+                  x
+              roomnumber:
+              shell:
+                  /bin/sh
+              uid:
+                  999
+              workphone:
+----------
+          ID: consul home directory exists
+    Function: file.directory
+        Name: /var/consul
+      Result: True
+     Comment: The directory /var/consul is in the correct state
+     Started: 13:44:06.010189
+    Duration: 2.383 ms
+     Changes:   
+----------
+          ID: consul service
+    Function: service.running
+        Name: consul
+      Result: True
+     Comment: Service consul has been enabled, and is running
+     Started: 13:44:06.013836
+    Duration: 971.949 ms
+     Changes:   
+              ----------
+              consul:
+                  True
+----------
+          ID: consul systemd daemon reload
+    Function: cmd.run
+        Name: systemctl daemon-reload
+      Result: True
+     Comment: Command "systemctl daemon-reload" run
+     Started: 13:44:06.990387
+    Duration: 462.418 ms
+     Changes:   
+              ----------
+              pid:
+                  6120
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: consul config reload
+    Function: cmd.run
+        Name: systemctl reload consul
+      Result: False
+     Comment: Command "systemctl reload consul" run
+     Started: 13:44:07.457776
+    Duration: 115.685 ms
+     Changes:   
+              ----------
+              pid:
+                  6157
+              retcode:
+                  1
+              stderr:
+                  Job for consul.service failed because the control process exited with error code.
+                  See "systemctl status consul.service" and "journalctl -xe" for details.
+              stdout:
+----------
+          ID: consul restart
+    Function: cmd.run
+        Name: systemctl restart consul
+      Result: True
+     Comment: Command "systemctl restart consul" run
+     Started: 13:44:07.577172
+    Duration: 11090.104 ms
+     Changes:   
+              ----------
+              pid:
+                  6165
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: docker package dependencies
+    Function: pkg.installed
+      Result: True
+     Comment: All specified packages are already installed
+     Started: 13:44:18.683668
+    Duration: 444.821 ms
+     Changes:   
+----------
+          ID: docker package repository
+    Function: pkgrepo.managed
+        Name: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+      Result: True
+     Comment: Configured package repo 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+     Started: 13:44:19.132008
+    Duration: 7979.247 ms
+     Changes:   
+              ----------
+              repo:
+                  deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+----------
+          ID: docker package
+    Function: pkg.installed
+        Name: docker-ce
+      Result: True
+     Comment: The following packages were installed/updated: docker-ce
+     Started: 13:44:27.132008
+    Duration: 578869.206 ms
+     Changes:   
+              ----------
+              aufs-tools:
+                  ----------
+                  new:
+                      1:4.9+20170918-1ubuntu1
+                  old:
+              cgroupfs-mount:
+                  ----------
+                  new:
+                      1.4
+                  old:
+              docker-ce:
+                  ----------
+                  new:
+                      18.06.1~ce~3-0~ubuntu
+                  old:
+              libltdl7:
+                  ----------
+                  new:
+                      2.4.6-2
+                  old:
+              pigz:
+                  ----------
+                  new:
+                      2.4-1
+                  old:
+----------
+          ID: docker config
+    Function: file.managed
+        Name: /etc/docker/daemon.json
+      Result: True
+     Comment: File /etc/docker/daemon.json updated
+     Started: 13:54:06.026469
+    Duration: 95.983 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: docker service
+    Function: service.running
+        Name: docker
+      Result: True
+     Comment: Service restarted
+     Started: 13:54:07.920739
+    Duration: 2920.791 ms
+     Changes:   
+              ----------
+              docker:
+                  True
+----------
+          ID: docker compose install
+    Function: file.managed
+        Name: /usr/local/bin/docker-compose
+      Result: True
+     Comment: File /usr/local/bin/docker-compose updated
+     Started: 13:54:10.846683
+    Duration: 2643.789 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0755
+----------
+          ID: nomad install
+    Function: archive.extracted
+        Name: /usr/local/sbin
+      Result: True
+     Comment: https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip extracted to /usr/local/sbin/, due to absence of one or more files/dirs
+     Started: 13:54:13.500894
+    Duration: 2993.978 ms
+     Changes:   
+              ----------
+              extracted_files:
+                  - nomad
+----------
+          ID: nomad after install
+    Function: cmd.run
+        Name: chmod a+x /usr/local/sbin/nomad
+      Result: True
+     Comment: Command "chmod a+x /usr/local/sbin/nomad" run
+     Started: 13:54:16.506938
+    Duration: 63.694 ms
+     Changes:   
+              ----------
+              pid:
+                  8646
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: nomad directory exists
+    Function: file.directory
+        Name: /var/nomad
+      Result: True
+     Comment: Directory /var/nomad updated
+     Started: 13:54:16.573595
+    Duration: 36.672 ms
+     Changes:   
+              ----------
+              /var/nomad:
+                  New Dir
+----------
+          ID: nomad client startup script
+    Function: file.managed
+        Name: /etc/systemd/system/nomad-client.service
+      Result: True
+     Comment: File /etc/systemd/system/nomad-client.service updated
+     Started: 13:54:16.612328
+    Duration: 36.343 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: nomad server startup script
+    Function: file.managed
+        Name: /etc/systemd/system/nomad-server.service
+      Result: True
+     Comment: File /etc/systemd/system/nomad-server.service updated
+     Started: 13:54:16.652561
+    Duration: 37.257 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: nomad systemd daemon reload
+    Function: cmd.run
+        Name: systemctl daemon-reload
+      Result: True
+     Comment: Command "systemctl daemon-reload" run
+     Started: 13:54:16.690980
+    Duration: 324.971 ms
+     Changes:   
+              ----------
+              pid:
+                  8650
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: nomad client config
+    Function: file.managed
+        Name: /etc/nomad/client/client.json
+      Result: True
+     Comment: File /etc/nomad/client/client.json updated
+     Started: 13:54:17.016278
+    Duration: 95.838 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: nomad client service
+    Function: service.running
+        Name: nomad-client
+      Result: True
+     Comment: Service nomad-client has been enabled, and is running
+     Started: 13:54:17.112953
+    Duration: 736.262 ms
+     Changes:   
+              ----------
+              nomad-client:
+                  True
+----------
+          ID: nomad client config reload
+    Function: cmd.run
+        Name: systemctl reload nomad-client
+      Result: True
+     Comment: Command "systemctl reload nomad-client" run
+     Started: 13:54:17.855892
+    Duration: 96.32 ms
+     Changes:   
+              ----------
+              pid:
+                  8758
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: nomad client restart
+    Function: cmd.run
+        Name: systemctl restart nomad-client
+      Result: True
+     Comment: Command "systemctl restart nomad-client" run
+     Started: 13:54:17.953931
+    Duration: 30.127 ms
+     Changes:   
+              ----------
+              pid:
+                  8760
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: nomad server config
+    Function: file.managed
+        Name: /etc/nomad/server/server.json
+      Result: True
+     Comment: File /etc/nomad/server/server.json updated
+     Started: 13:54:17.984819
+    Duration: 108.963 ms
+     Changes:   
+              ----------
+              diff:
+                  New file
+              mode:
+                  0644
+----------
+          ID: nomad server service
+    Function: service.running
+        Name: nomad-server
+      Result: True
+     Comment: Service nomad-server has been enabled, and is running
+     Started: 13:54:18.096103
+    Duration: 905.095 ms
+     Changes:   
+              ----------
+              nomad-server:
+                  True
+----------
+          ID: nomad server config reload
+    Function: cmd.run
+        Name: systemctl reload nomad-server
+      Result: True
+     Comment: Command "systemctl reload nomad-server" run
+     Started: 13:54:19.016659
+    Duration: 88.854 ms
+     Changes:   
+              ----------
+              pid:
+                  8871
+              retcode:
+                  0
+              stderr:
+              stdout:
+----------
+          ID: nomad server restart
+    Function: cmd.run
+        Name: systemctl restart nomad-server
+      Result: True
+     Comment: Command "systemctl restart nomad-server" run
+     Started: 13:54:19.107376
+    Duration: 1096.708 ms
+     Changes:   
+              ----------
+              pid:
+                  8873
+              retcode:
+                  0
+              stderr:
+              stdout:
+
+Summary for local
+-------------
+Succeeded: 41 (changed=40)
+Failed:     1
+-------------
+Total states run:     42
+Total run time:  637.982 s
+
+
+Stderr from the command:
+
+[DEBUG   ] Reading configuration from /etc/salt/minion
+[DEBUG   ] Using cached minion ID from /etc/salt/minion_id: node-1
+[DEBUG   ] Configuration file path: /etc/salt/minion
+[WARNING ] Insecure logging configuration detected! Sensitive data may be logged.
+[DEBUG   ] Grains refresh requested. Refreshing grains.
+[DEBUG   ] Reading configuration from /etc/salt/minion
+[DEBUG   ] Please install 'virt-what' to improve results of the 'virtual' grain.
+[DEBUG   ] Determining pillar cache
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[DEBUG   ] compile template: /srv/pillar/top.sls
+[DEBUG   ] Jinja search path: [u'/srv/pillar']
+[PROFILE ] Time (in seconds) to render '/srv/pillar/top.sls' using 'jinja' renderer: 0.00808095932007
+[DEBUG   ] Rendered data from file: /srv/pillar/top.sls:
+base:
+  '*':
+    - common
+
+  'node*':
+    - cluster.common
+
+
+  node-1:
+    - cluster.node-1
+
+  node-2:
+    - cluster.node-2
+
+  node-3:
+    - cluster.node-3
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'base', OrderedDict([(u'*', [u'common']), (u'node*', [u'cluster.common']), (u'node-1', [u'cluster.node-1']), (u'node-2', [u'cluster.node-2']), (u'node-3', [u'cluster.node-3'])]))])
+[PROFILE ] Time (in seconds) to render '/srv/pillar/top.sls' using 'yaml' renderer: 0.00259113311768
+[DEBUG   ] compound_match: node-1 ? *
+[DEBUG   ] compound_match node-1 ? "*" => "True"
+[DEBUG   ] compound_match: node-1 ? node*
+[DEBUG   ] compound_match node-1 ? "node*" => "True"
+[DEBUG   ] compound_match: node-1 ? node-1
+[DEBUG   ] compound_match node-1 ? "node-1" => "True"
+[DEBUG   ] compound_match: node-1 ? node-2
+[DEBUG   ] compound_match node-1 ? "node-2" => "False"
+[DEBUG   ] compound_match: node-1 ? node-3
+[DEBUG   ] compound_match node-1 ? "node-3" => "False"
+[DEBUG   ] compile template: /srv/pillar/common.sls
+[DEBUG   ] Template is an empty file: /srv/pillar/common.sls
+[DEBUG   ] compile template: /srv/pillar/cluster/common.sls
+[DEBUG   ] Jinja search path: [u'/srv/pillar']
+[PROFILE ] Time (in seconds) to render '/srv/pillar/cluster/common.sls' using 'jinja' renderer: 0.00802397727966
+[DEBUG   ] Rendered data from file: /srv/pillar/cluster/common.sls:
+# Static backend network. Used for the fan networking. Nodes are allocated an 
+# ip by replacing the classD value with the nodes's cluster id. E.g. 172.30.0.3
+backend network cidr: 172.30.0.0/29
+
+# The class B network ubuntu-fan uses to create the overlay network for docker
+# containers. The class D value from the backend network are mapped up to class
+# C values and the server is allocated a class D value of 1.
+#
+# Taking the example from above, the server's overlay fan network ip will be 
+# 172.31.3.1 (CIDR 172.31.3.0/24)
+fan overlay cidr: 172.31.0.0/16
+
+# Frontend (public) IP address
+#frontend IP address: 172.16.0.1
+
+# The symetric encryption key used for cosul's serf gossip protocol
+consul gossip encryption key: GHrF4UIY0j5y6CZqZE+X6g==
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'backend network cidr', u'172.30.0.0/29'), (u'fan overlay cidr', u'172.31.0.0/16'), (u'consul gossip encryption key', u'GHrF4UIY0j5y6CZqZE+X6g==')])
+[PROFILE ] Time (in seconds) to render '/srv/pillar/cluster/common.sls' using 'yaml' renderer: 0.00225400924683
+[DEBUG   ] compile template: /srv/pillar/cluster/node-1.sls
+[DEBUG   ] Jinja search path: [u'/srv/pillar']
+[PROFILE ] Time (in seconds) to render '/srv/pillar/cluster/node-1.sls' using 'jinja' renderer: 0.00596380233765
+[DEBUG   ] Rendered data from file: /srv/pillar/cluster/node-1.sls:
+# Used to generate various IP addresses
+cluster index: 1
+
+# [UNUSED] Frontend IP address. Rather than relying on DHCP, the address
+# is static to provide a more consistent behaviour during 'apply' because
+# there is less relience on grain data
+#frontend IP address: 192.168.1.51
+frontend IP address: 172.16.0.1
+
+# Meta labels to set on the Nomad client
+nomad meta:
+#  labelname: labelvalue
+
+# Control whether a node is a nomad server node
+nomad server: True
+
+# Control whether a node is a consul server node
+consul server: True
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'cluster index', 1), (u'frontend IP address', u'172.16.0.1'), (u'nomad meta', None), (u'nomad server', True), (u'consul server', True)])
+[PROFILE ] Time (in seconds) to render '/srv/pillar/cluster/node-1.sls' using 'yaml' renderer: 0.00162315368652
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[DEBUG   ] LazyLoaded state.highstate
+[DEBUG   ] LazyLoaded grains.get
+[DEBUG   ] LazyLoaded saltutil.is_running
+[DEBUG   ] LazyLoaded config.get
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] Updating roots fileserver cache
+[INFO    ] Loading fresh modules for state activity
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[DEBUG   ] In saltenv 'base', looking at rel_path 'top.sls' to resolve 'salt://top.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/top.sls' to resolve 'salt://top.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://top.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'top.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/top.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/top.sls' using 'jinja' renderer: 0.0254189968109
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/top.sls:
+base:
+  '*':
+    - test
+    - networking
+    - dnsmasq
+    - consul
+    - docker
+    - nomad
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'base', OrderedDict([(u'*', [u'test', u'networking', u'dnsmasq', u'consul', u'docker', u'nomad'])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/top.sls' using 'yaml' renderer: 0.00568795204163
+[DEBUG   ] compound_match: node-1 ? *
+[DEBUG   ] compound_match node-1 ? "*" => "True"
+[DEBUG   ] The _ext_nodes master function has been renamed to _master_tops. To ensure compatibility when using older Salt masters we will continue to invoke the function as _ext_nodes until the Magnesium release.
+[DEBUG   ] LazyLoaded saltutil.sync_all
+[DEBUG   ] Syncing all
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/clouds'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing clouds for environment 'base'
+[INFO    ] Loading cache from salt://_clouds, for base)
+[INFO    ] Caching directory '_clouds/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_clouds'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/beacons'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing beacons for environment 'base'
+[INFO    ] Loading cache from salt://_beacons, for base)
+[INFO    ] Caching directory '_beacons/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_beacons'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/modules'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing modules for environment 'base'
+[INFO    ] Loading cache from salt://_modules, for base)
+[INFO    ] Caching directory '_modules/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_modules'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/states'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing states for environment 'base'
+[INFO    ] Loading cache from salt://_states, for base)
+[INFO    ] Caching directory '_states/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_states'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/sdb'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing sdb for environment 'base'
+[INFO    ] Loading cache from salt://_sdb, for base)
+[INFO    ] Caching directory '_sdb/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_sdb'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/grains'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing grains for environment 'base'
+[INFO    ] Loading cache from salt://_grains, for base)
+[INFO    ] Caching directory '_grains/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_grains'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/renderers'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing renderers for environment 'base'
+[INFO    ] Loading cache from salt://_renderers, for base)
+[INFO    ] Caching directory '_renderers/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_renderers'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/returners'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing returners for environment 'base'
+[INFO    ] Loading cache from salt://_returners, for base)
+[INFO    ] Caching directory '_returners/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_returners'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/output'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing output for environment 'base'
+[INFO    ] Loading cache from salt://_output, for base)
+[INFO    ] Caching directory '_output/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_output'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/utils'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing utils for environment 'base'
+[INFO    ] Loading cache from salt://_utils, for base)
+[INFO    ] Caching directory '_utils/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_utils'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/log_handlers'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing log_handlers for environment 'base'
+[INFO    ] Loading cache from salt://_log_handlers, for base)
+[INFO    ] Caching directory '_log_handlers/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_log_handlers'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/proxy'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing proxy for environment 'base'
+[INFO    ] Loading cache from salt://_proxy, for base)
+[INFO    ] Caching directory '_proxy/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_proxy'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/engines'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing engines for environment 'base'
+[INFO    ] Loading cache from salt://_engines, for base)
+[INFO    ] Caching directory '_engines/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_engines'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/thorium'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing thorium for environment 'base'
+[INFO    ] Loading cache from salt://_thorium, for base)
+[INFO    ] Caching directory '_thorium/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_thorium'
+[INFO    ] Creating module dir '/var/cache/salt/minion/extmods/pillar'
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[INFO    ] Syncing pillar for environment 'base'
+[INFO    ] Loading cache from salt://_pillar, for base)
+[INFO    ] Caching directory '_pillar/' for environment 'base'
+[DEBUG   ] Local cache dir: '/var/cache/salt/minion/files/base/_pillar'
+[DEBUG   ] Refreshing modules...
+[INFO    ] Loading fresh modules for state activity
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[DEBUG   ] In saltenv 'base', looking at rel_path 'test.sls' to resolve 'salt://test.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/test.sls' to resolve 'salt://test.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://test.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'test.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/test.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/test.sls' using 'jinja' renderer: 0.0154609680176
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/test.sls:
+pillar test:
+  cmd.run:
+    - name: touch /pillar-cluster-index-1
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'pillar test', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'touch /pillar-cluster-index-1')])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/test.sls' using 'yaml' renderer: 0.00209403038025
+[DEBUG   ] In saltenv 'base', looking at rel_path 'networking.sls' to resolve 'salt://networking.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/networking.sls' to resolve 'salt://networking.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://networking.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'networking.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/networking.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/networking.sls' using 'jinja' renderer: 0.0163440704346
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/networking.sls:
+# NOTE: Commented Jinja template markup  should also be uncommented
+
+# Uncomment to configure the frontend (public) interface if required
+# Currently this is configured via Vagrant...
+#frontend-network:
+#  network.managed:
+#    - name: [dev-logical-name]
+#    - enabled: True
+#    - type: eth
+#    - proto: none
+#    - ipaddr: /21
+#    - gateway: [gateway-ip]
+#    # Uncomment if DNS resolution is failing via consul/dnsmasq
+#    #- dns:
+#    #    - [dns-ip-1]
+#    #    - [dns-ip-n]
+
+# Uncomment to configure the backend (private) interface if required
+# Currently this is configured via Vagrant...
+#backend-network:
+#  network.managed:
+#    - name: [dev-logical-name]
+#    - enabled: True
+#    - type: eth
+#    - proto: none
+#    - ipaddr: 
+
+fan-networking:
+  pkg.installed:
+    - name: ubuntu-fan
+  file.managed:
+    - name: /etc/network/fan
+    - source: /srv/salt/network/fan.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+
+fan-network-refresh:
+  cmd.run:
+    - name: fanctl up -a
+    - unless: fanctl show | grep "fan-.*.*enable"
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'fan-networking', OrderedDict([(u'pkg.installed', [OrderedDict([(u'name', u'ubuntu-fan')])]), (u'file.managed', [OrderedDict([(u'name', u'/etc/network/fan')]), OrderedDict([(u'source', u'/srv/salt/network/fan.jinja')]), OrderedDict([(u'template', u'jinja')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)])])])), (u'fan-network-refresh', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'fanctl up -a')]), OrderedDict([(u'unless', u'fanctl show | grep "fan-.*.*enable"')])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/networking.sls' using 'yaml' renderer: 0.00378108024597
+[DEBUG   ] In saltenv 'base', looking at rel_path 'dnsmasq.sls' to resolve 'salt://dnsmasq.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/dnsmasq.sls' to resolve 'salt://dnsmasq.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://dnsmasq.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'dnsmasq.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/dnsmasq.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/dnsmasq.sls' using 'jinja' renderer: 0.0178771018982
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/dnsmasq.sls:
+dnsmasq package:
+  pkg.installed:
+    - name: dnsmasq
+
+dnsmasq config basic:
+  file.managed:
+    - name: /etc/dnsmasq.d/basics
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+    - contents:
+      - no-hosts     # Don't read /etc/hosts
+      - no-resolv    # Don't repeatedly read /etc/resolv.conf
+      - cache-size=0 # Number of domains to cache
+
+dnsmasq config consul:
+  file.managed:
+    - name: /etc/dnsmasq.d/consul
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+    - contents: server=/cluster/172.16.0.1#8600
+
+dnsmasq config this:
+  file.managed:
+    - name: /etc/dnsmasq.d/this
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+    - contents:
+      - address=/this.node.cluster/172.16.0.1
+      - address=/front.this.node.cluster/172.16.0.1
+      - address=/back.this.node.cluster/172.30.0.1
+
+dnsmasq service:
+  service.running:
+    - name: dnsmasq
+    - enable: True
+    - watch:
+      - file: dnsmasq config basic
+      - file: dnsmasq config consul
+      - file: dnsmasq config this
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'dnsmasq package', OrderedDict([(u'pkg.installed', [OrderedDict([(u'name', u'dnsmasq')])])])), (u'dnsmasq config basic', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/dnsmasq.d/basics')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)]), OrderedDict([(u'contents', [u'no-hosts', u'no-resolv', u'cache-size=0'])])])])), (u'dnsmasq config consul', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/dnsmasq.d/consul')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)]), OrderedDict([(u'contents', u'server=/cluster/172.16.0.1#8600')])])])), (u'dnsmasq config this', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/dnsmasq.d/this')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)]), OrderedDict([(u'contents', [u'address=/this.node.cluster/172.16.0.1', u'address=/front.this.node.cluster/172.16.0.1', u'address=/back.this.node.cluster/172.30.0.1'])])])])), (u'dnsmasq service', OrderedDict([(u'service.running', [OrderedDict([(u'name', u'dnsmasq')]), OrderedDict([(u'enable', True)]), OrderedDict([(u'watch', [OrderedDict([(u'file', u'dnsmasq config basic')]), OrderedDict([(u'file', u'dnsmasq config consul')]), OrderedDict([(u'file', u'dnsmasq config this')])])])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/dnsmasq.sls' using 'yaml' renderer: 0.00861310958862
+[DEBUG   ] In saltenv 'base', looking at rel_path 'consul.sls' to resolve 'salt://consul.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/consul.sls' to resolve 'salt://consul.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://consul.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'consul.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/consul.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/consul.sls' using 'jinja' renderer: 0.0155630111694
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/consul.sls:
+consul install:
+  archive.extracted:
+    - name: /usr/local/sbin
+    - source: https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+    - source_hash: a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac
+    - source_hash_update: True
+    - enforce_toplevel: False
+    - if_missing: /usr/local/sbin/consul
+
+# Deliberate if_missing means you have to manually remove consul from /usr/local/sbin
+# before it will be updated. This prevents accidental update of all cluster servers at
+# once which has a catastrophic effect on the consul journal.
+
+consul after install:
+  cmd.run:
+    - name: chmod a+x /usr/local/sbin/consul
+    - onchanges:
+      - archive: consul install
+
+consul config:
+  file.managed:
+    - name: /etc/consul/consul.json
+    - source: /srv/salt/consul/consul.json.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+consul node healthcheck scripts:
+  file.copy:
+   - name: /etc/consul/scripts
+   - source: /srv/salt/consul/scripts
+   - user: root
+   - group: root
+   - mode: 755
+   - makedirs: True
+   - subdir: True
+
+consul node healthcheck:
+  file.managed:
+    - name: /etc/consul/node-healthchecks.json
+    - source: /srv/salt/consul/node-healthchecks.json
+    - user: root
+    - group: root
+    - mode: 644
+
+consul startup script:
+  file.managed:
+    - name: /etc/systemd/system/consul.service
+    - source: /srv/salt/consul/consul.service
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+consul group:
+  group.present:
+    - name: consul
+    - system: True
+
+consul user:
+  user.present:
+    - name: consul
+    - groups:
+      - consul
+    - remove_groups: True
+    - system: True
+    - home: /var/consul
+    - require:
+      - group: consul group
+
+consul home directory exists:
+  file.directory:
+    - name: /var/consul
+    - user: consul
+    - group: consul
+    - dir_mode: 755
+    - file_mode: 644
+    - force: True
+    - require:
+      - user: consul user
+
+consul service:
+  service.running:
+    - name: consul
+    - enable: True
+    - require:
+      - file: consul home directory exists
+
+consul systemd daemon reload:
+  cmd.run:
+    - name: systemctl daemon-reload
+    - onchanges:
+      - file: consul startup script
+
+consul config reload:
+  cmd.run:
+    - name: systemctl reload consul
+    - onchanges:
+      - file: consul config
+      - file: consul node healthcheck
+      - file: consul node healthcheck scripts
+
+consul restart:
+  cmd.run:
+    - name: systemctl restart consul
+    - onchanges:
+      - cmd: consul after install
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'consul install', OrderedDict([(u'archive.extracted', [OrderedDict([(u'name', u'/usr/local/sbin')]), OrderedDict([(u'source', u'https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip')]), OrderedDict([(u'source_hash', u'a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac')]), OrderedDict([(u'source_hash_update', True)]), OrderedDict([(u'enforce_toplevel', False)]), OrderedDict([(u'if_missing', u'/usr/local/sbin/consul')])])])), (u'consul after install', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'chmod a+x /usr/local/sbin/consul')]), OrderedDict([(u'onchanges', [OrderedDict([(u'archive', u'consul install')])])])])])), (u'consul config', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/consul/consul.json')]), OrderedDict([(u'source', u'/srv/salt/consul/consul.json.jinja')]), OrderedDict([(u'template', u'jinja')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'consul node healthcheck scripts', OrderedDict([(u'file.copy', [OrderedDict([(u'name', u'/etc/consul/scripts')]), OrderedDict([(u'source', u'/srv/salt/consul/scripts')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 755)]), OrderedDict([(u'makedirs', True)]), OrderedDict([(u'subdir', True)])])])), (u'consul node healthcheck', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/consul/node-healthchecks.json')]), OrderedDict([(u'source', u'/srv/salt/consul/node-healthchecks.json')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)])])])), (u'consul startup script', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/systemd/system/consul.service')]), OrderedDict([(u'source', u'/srv/salt/consul/consul.service')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'consul group', OrderedDict([(u'group.present', [OrderedDict([(u'name', u'consul')]), OrderedDict([(u'system', True)])])])), (u'consul user', OrderedDict([(u'user.present', [OrderedDict([(u'name', u'consul')]), OrderedDict([(u'groups', [u'consul'])]), OrderedDict([(u'remove_groups', True)]), OrderedDict([(u'system', True)]), OrderedDict([(u'home', u'/var/consul')]), OrderedDict([(u'require', [OrderedDict([(u'group', u'consul group')])])])])])), (u'consul home directory exists', OrderedDict([(u'file.directory', [OrderedDict([(u'name', u'/var/consul')]), OrderedDict([(u'user', u'consul')]), OrderedDict([(u'group', u'consul')]), OrderedDict([(u'dir_mode', 755)]), OrderedDict([(u'file_mode', 644)]), OrderedDict([(u'force', True)]), OrderedDict([(u'require', [OrderedDict([(u'user', u'consul user')])])])])])), (u'consul service', OrderedDict([(u'service.running', [OrderedDict([(u'name', u'consul')]), OrderedDict([(u'enable', True)]), OrderedDict([(u'require', [OrderedDict([(u'file', u'consul home directory exists')])])])])])), (u'consul systemd daemon reload', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl daemon-reload')]), OrderedDict([(u'onchanges', [OrderedDict([(u'file', u'consul startup script')])])])])])), (u'consul config reload', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl reload consul')]), OrderedDict([(u'onchanges', [OrderedDict([(u'file', u'consul config')]), OrderedDict([(u'file', u'consul node healthcheck')]), OrderedDict([(u'file', u'consul node healthcheck scripts')])])])])])), (u'consul restart', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl restart consul')]), OrderedDict([(u'onchanges', [OrderedDict([(u'cmd', u'consul after install')])])])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/consul.sls' using 'yaml' renderer: 0.0183489322662
+[DEBUG   ] In saltenv 'base', looking at rel_path 'docker.sls' to resolve 'salt://docker.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/docker.sls' to resolve 'salt://docker.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://docker.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'docker.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/docker.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/docker.sls' using 'jinja' renderer: 0.0162389278412
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/docker.sls:
+docker package dependencies:
+  pkg.installed:
+    - pkgs:
+      - apt-transport-https
+      - iptables
+      - ca-certificates
+      - software-properties-common
+
+docker package repository:
+  pkgrepo.managed:
+    - name: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    - humanname: Ubuntu Bionic Docker Package Repository
+    - key_url: https://download.docker.com/linux/ubuntu/gpg
+    - file: /etc/apt/sources.list.d/docker.list
+    - refresh: True
+
+docker package:
+  pkg.installed:
+    - name: docker-ce
+
+docker config:
+  file.managed:
+    - name: /etc/docker/daemon.json
+    - source: /srv/salt/docker/daemon.json.jinja
+    - template: jinja
+    - mode: 644
+    - user: root
+
+docker service:
+  service.running:
+    - name: docker
+    - enable: True
+    - watch:
+      - file: docker config
+
+docker compose install:
+  file.managed:
+    - name: /usr/local/bin/docker-compose
+    - source: https://github.com/docker/compose/releases/download/1.23.0/docker-compose-Linux-x86_64
+    - source_hash: 5b6f948a264a2c018a124b3cae0ce788f14b94a37ab05ca3ba3bb8622f5b7d0b
+    - user: root
+    - group: root
+    - mode: 755
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'docker package dependencies', OrderedDict([(u'pkg.installed', [OrderedDict([(u'pkgs', [u'apt-transport-https', u'iptables', u'ca-certificates', u'software-properties-common'])])])])), (u'docker package repository', OrderedDict([(u'pkgrepo.managed', [OrderedDict([(u'name', u'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable')]), OrderedDict([(u'humanname', u'Ubuntu Bionic Docker Package Repository')]), OrderedDict([(u'key_url', u'https://download.docker.com/linux/ubuntu/gpg')]), OrderedDict([(u'file', u'/etc/apt/sources.list.d/docker.list')]), OrderedDict([(u'refresh', True)])])])), (u'docker package', OrderedDict([(u'pkg.installed', [OrderedDict([(u'name', u'docker-ce')])])])), (u'docker config', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/docker/daemon.json')]), OrderedDict([(u'source', u'/srv/salt/docker/daemon.json.jinja')]), OrderedDict([(u'template', u'jinja')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'user', u'root')])])])), (u'docker service', OrderedDict([(u'service.running', [OrderedDict([(u'name', u'docker')]), OrderedDict([(u'enable', True)]), OrderedDict([(u'watch', [OrderedDict([(u'file', u'docker config')])])])])])), (u'docker compose install', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/usr/local/bin/docker-compose')]), OrderedDict([(u'source', u'https://github.com/docker/compose/releases/download/1.23.0/docker-compose-Linux-x86_64')]), OrderedDict([(u'source_hash', u'5b6f948a264a2c018a124b3cae0ce788f14b94a37ab05ca3ba3bb8622f5b7d0b')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 755)])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/docker.sls' using 'yaml' renderer: 0.00877904891968
+[DEBUG   ] In saltenv 'base', looking at rel_path 'nomad.sls' to resolve 'salt://nomad.sls'
+[DEBUG   ] In saltenv 'base', ** considering ** path '/var/cache/salt/minion/files/base/nomad.sls' to resolve 'salt://nomad.sls'
+[DEBUG   ] Fetching file from saltenv 'base', ** attempting ** 'salt://nomad.sls'
+[DEBUG   ] No dest file found
+[INFO    ] Fetching file from saltenv 'base', ** done ** 'nomad.sls'
+[DEBUG   ] compile template: /var/cache/salt/minion/files/base/nomad.sls
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/nomad.sls' using 'jinja' renderer: 0.015095949173
+[DEBUG   ] Rendered data from file: /var/cache/salt/minion/files/base/nomad.sls:
+nomad install:
+  archive.extracted:
+    - name: /usr/local/sbin
+    - source: https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip
+    - source_hash: 7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c
+    - source_hash_update: True
+    - enforce_toplevel: False
+    - if_missing: /usr/local/sbin/nomad
+
+# Deliberate if_missing means you have to manually remove nomad from /usr/local/sbin
+# before it will be updated. This prevents accidental update of all cluster servers at
+# once which means all sorts of things go bang and lots of containers to try (and
+# often fail) to restart. If Nomad has been updated then you need to drain the node,
+# restart nomad manually via systemctl and then allow allocations back onto it.
+
+nomad after install:
+  cmd.run:
+    - name: chmod a+x /usr/local/sbin/nomad
+    - onchanges:
+      - archive: nomad install
+  
+nomad directory exists:
+  file.directory:
+    - name: /var/nomad
+    - user: root
+    - group: root
+    - mode: 755
+    - file_mode: 644
+    - force: True
+
+nomad systemd daemon reload:
+  cmd.run:
+    - name: systemctl daemon-reload
+    - onchanges:
+      - file: nomad client startup script
+
+      - file: nomad server startup script
+
+
+# Client config
+nomad client config:
+  file.managed:
+    - name: /etc/nomad/client/client.json
+    - source: /srv/salt/nomad/client.json.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad client startup script:
+  file.managed:
+    - name: /etc/systemd/system/nomad-client.service
+    - source: /srv/salt/nomad/nomad-client.service
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad client service:
+  service.running:
+    - name: nomad-client
+    - enable: True
+    - require:
+      - file: nomad directory exists
+
+nomad client config reload:
+  cmd.run:
+    - name: systemctl reload nomad-client
+    - onchanges:
+      - file: nomad client config
+
+nomad client restart:
+  cmd.run:
+    - name: systemctl restart nomad-client
+    - onchanges:
+      - cmd: nomad after install
+
+# Server config
+
+nomad server config:
+  file.managed:
+    - name: /etc/nomad/server/server.json
+    - source: /srv/salt/nomad/server.json.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad server startup script:
+  file.managed:
+    - name: /etc/systemd/system/nomad-server.service
+    - source: /srv/salt/nomad/nomad-server.service
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+
+nomad server service:
+  service.running:
+    - name: nomad-server
+    - enable: True
+    - require:
+      - file: nomad directory exists
+
+nomad server config reload:
+  cmd.run:
+    - name: systemctl reload nomad-server
+    - onchanges:
+      - file: nomad server config
+
+nomad server restart:
+  cmd.run:
+    - name: systemctl restart nomad-server
+    - onchanges:
+      - cmd: nomad after install
+
+[DEBUG   ] Results of YAML rendering: 
+OrderedDict([(u'nomad install', OrderedDict([(u'archive.extracted', [OrderedDict([(u'name', u'/usr/local/sbin')]), OrderedDict([(u'source', u'https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip')]), OrderedDict([(u'source_hash', u'7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c')]), OrderedDict([(u'source_hash_update', True)]), OrderedDict([(u'enforce_toplevel', False)]), OrderedDict([(u'if_missing', u'/usr/local/sbin/nomad')])])])), (u'nomad after install', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'chmod a+x /usr/local/sbin/nomad')]), OrderedDict([(u'onchanges', [OrderedDict([(u'archive', u'nomad install')])])])])])), (u'nomad directory exists', OrderedDict([(u'file.directory', [OrderedDict([(u'name', u'/var/nomad')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 755)]), OrderedDict([(u'file_mode', 644)]), OrderedDict([(u'force', True)])])])), (u'nomad systemd daemon reload', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl daemon-reload')]), OrderedDict([(u'onchanges', [OrderedDict([(u'file', u'nomad client startup script')]), OrderedDict([(u'file', u'nomad server startup script')])])])])])), (u'nomad client config', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/nomad/client/client.json')]), OrderedDict([(u'source', u'/srv/salt/nomad/client.json.jinja')]), OrderedDict([(u'template', u'jinja')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'nomad client startup script', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/systemd/system/nomad-client.service')]), OrderedDict([(u'source', u'/srv/salt/nomad/nomad-client.service')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'nomad client service', OrderedDict([(u'service.running', [OrderedDict([(u'name', u'nomad-client')]), OrderedDict([(u'enable', True)]), OrderedDict([(u'require', [OrderedDict([(u'file', u'nomad directory exists')])])])])])), (u'nomad client config reload', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl reload nomad-client')]), OrderedDict([(u'onchanges', [OrderedDict([(u'file', u'nomad client config')])])])])])), (u'nomad client restart', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl restart nomad-client')]), OrderedDict([(u'onchanges', [OrderedDict([(u'cmd', u'nomad after install')])])])])])), (u'nomad server config', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/nomad/server/server.json')]), OrderedDict([(u'source', u'/srv/salt/nomad/server.json.jinja')]), OrderedDict([(u'template', u'jinja')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'nomad server startup script', OrderedDict([(u'file.managed', [OrderedDict([(u'name', u'/etc/systemd/system/nomad-server.service')]), OrderedDict([(u'source', u'/srv/salt/nomad/nomad-server.service')]), OrderedDict([(u'user', u'root')]), OrderedDict([(u'group', u'root')]), OrderedDict([(u'mode', 644)]), OrderedDict([(u'makedirs', True)])])])), (u'nomad server service', OrderedDict([(u'service.running', [OrderedDict([(u'name', u'nomad-server')]), OrderedDict([(u'enable', True)]), OrderedDict([(u'require', [OrderedDict([(u'file', u'nomad directory exists')])])])])])), (u'nomad server config reload', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl reload nomad-server')]), OrderedDict([(u'onchanges', [OrderedDict([(u'file', u'nomad server config')])])])])])), (u'nomad server restart', OrderedDict([(u'cmd.run', [OrderedDict([(u'name', u'systemctl restart nomad-server')]), OrderedDict([(u'onchanges', [OrderedDict([(u'cmd', u'nomad after install')])])])])]))])
+[PROFILE ] Time (in seconds) to render '/var/cache/salt/minion/files/base/nomad.sls' using 'yaml' renderer: 0.0189719200134
+[DEBUG   ] LazyLoaded config.option
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Running state [touch /pillar-cluster-index-1] at time 13:43:36.339037
+[INFO    ] Executing state cmd.run for [touch /pillar-cluster-index-1]
+[DEBUG   ] LazyLoaded cmd.run_all
+[INFO    ] Executing command 'touch /pillar-cluster-index-1' in directory '/root'
+[INFO    ] {u'pid': 4650, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [touch /pillar-cluster-index-1] at time 13:43:36.349960 (duration_in_ms=10.924)
+[DEBUG   ] LazyLoaded pkg.install
+[DEBUG   ] LazyLoaded pkg.installed
+[DEBUG   ] LazyLoaded systemd.booted
+[DEBUG   ] DSC: Only available on Windows systems
+[DEBUG   ] Module PSGet: Only available on Windows systems
+[DEBUG   ] LazyLoaded platform.is_windows
+[DEBUG   ] Could not LazyLoad pkg.ex_mod_init: 'pkg.ex_mod_init' is not available.
+[INFO    ] Running state [ubuntu-fan] at time 13:43:38.527693
+[INFO    ] Executing state pkg.installed for [ubuntu-fan]
+[DEBUG   ] Could not LazyLoad pkg.resolve_capabilities: 'pkg.resolve_capabilities' is not available.
+[INFO    ] Executing command [u'dpkg-query', u'--showformat', u'${Status} ${Package} ${Version} ${Architecture}', u'-W'] in directory '/root'
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[DEBUG   ] Could not LazyLoad pkg.check_db: 'pkg.check_db' is not available.
+[INFO    ] Executing command [u'apt-cache', u'-q', u'policy', u'ubuntu-fan'] in directory '/root'
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[INFO    ] Executing command [u'apt-get', u'-q', u'update'] in directory '/root'
+[INFO    ] Executing command [u'dpkg', u'--get-selections', u'*'] in directory '/root'
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'apt-get', u'-q', u'-y', u'-o', u'DPkg::Options::=--force-confold', u'-o', u'DPkg::Options::=--force-confdef', u'install', u'ubuntu-fan'] in directory '/root'
+[INFO    ] Executing command [u'dpkg-query', u'--showformat', u'${Status} ${Package} ${Version} ${Architecture}', u'-W'] in directory '/root'
+[INFO    ] Made the following changes:
+'bridge-utils' changed from 'absent' to '1.5-15ubuntu1'
+'ubuntu-fan' changed from 'absent' to '0.12.10'
+
+[DEBUG   ] Refreshing modules...
+[INFO    ] Loading fresh modules for state activity
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[INFO    ] Completed state [ubuntu-fan] at time 13:43:49.317843 (duration_in_ms=10790.166)
+[DEBUG   ] LazyLoaded config.option
+[DEBUG   ] LazyLoaded file.managed
+[INFO    ] Running state [/etc/network/fan] at time 13:43:49.336666
+[INFO    ] Executing state file.managed for [/etc/network/fan]
+[DEBUG   ] LazyLoaded file.user_to_uid
+[DEBUG   ] LazyLoaded cp.is_cached
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] LazyLoaded files.is_text
+[DEBUG   ] LazyLoaded stringutils.get_diff
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Executing command [u'lsattr', u'/etc/network/fan'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/network/fan
+[DEBUG   ] output: --------------e--- /etc/network/fan
+[INFO    ] File changed:
+--- 
++++ 
+@@ -1,39 +1,2 @@
+-# FAN overlay network map.
+-
+-# The FAN is a very fast overlay network system for docker in cloud
+-# environments with limited IP addresses. The FAN multiplies host
+-# addresses by mapping them to a larger overlay network. It eliminates
+-# the need for a central database and myriad tunnels by mapping
+-# addresses mathematically.
+-
+-# This map file specifies the list of maps which can be enabled in
+-# /etc/network/interfaces or using the "fanctl config" command. See also
+-# fanatic(1) for a tool that will configure docker to use your fans.
+-# The only absolute rule is that all your participating machines use
+-# the same mapping for active fans.
+-
+-# The map translates a local address range to an overlay range.
+-
+-# RFC1918 - we recommend you use these for easy interop with other
+-# FAN users on small private networks. They provide around 250 IP's
+-# per 192.168.0.0/16 address, or 16 per 172.16.0.0/12 address.
+-
+-# local          overlay       options
+-192.168.0.0/16   250.0.0.0/8
+-172.16.0.0/12    251.0.0.0/8
+-
+-# RFC1918 VPC - we recommend you use the higher ranges of 10.0.0.0/8
+-# for your docker-centric VPC. This example provides 1,000 IP's per
+-# base IP in 10.254.0.0/16.
+-
+-10.254.0.0/16    252.0.0.0/8
+-10.254.0.0/16    253.0.0.0/8
+-10.254.0.0/16    254.0.0.0/8
+-
+-# CUSTOM
+-#
+-# You can map large ranges onto your own, smaller, ranges for address
+-# space expansion purposes. We recommend you adopt a common mapping for
+-# your entire institution.
+-
+-# local          overlay
++# Underlay      Overlay      Flags
++172.30.0.0/24  172.31.0.0/16  --enable
+
+[INFO    ] Completed state [/etc/network/fan] at time 13:43:49.479196 (duration_in_ms=142.529)
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Running state [fanctl up -a] at time 13:43:49.483213
+[INFO    ] Executing state cmd.run for [fanctl up -a]
+[INFO    ] Executing command 'fanctl show | grep "fan-.*.*enable"' in directory '/root'
+[DEBUG   ] retcode: 1
+[DEBUG   ] Last command return code: 1
+[INFO    ] Executing command 'fanctl up -a' in directory '/root'
+[INFO    ] {u'pid': 5536, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [fanctl up -a] at time 13:43:49.904039 (duration_in_ms=420.825)
+[DEBUG   ] LazyLoaded pkg.install
+[DEBUG   ] LazyLoaded pkg.installed
+[INFO    ] Running state [dnsmasq] at time 13:43:49.930275
+[INFO    ] Executing state pkg.installed for [dnsmasq]
+[DEBUG   ] LazyLoaded systemd.booted
+[DEBUG   ] DSC: Only available on Windows systems
+[DEBUG   ] Module PSGet: Only available on Windows systems
+[DEBUG   ] LazyLoaded platform.is_windows
+[DEBUG   ] Could not LazyLoad pkg.resolve_capabilities: 'pkg.resolve_capabilities' is not available.
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[DEBUG   ] Could not LazyLoad pkg.check_db: 'pkg.check_db' is not available.
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[INFO    ] Executing command [u'dpkg', u'--get-selections', u'*'] in directory '/root'
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'apt-get', u'-q', u'-y', u'-o', u'DPkg::Options::=--force-confold', u'-o', u'DPkg::Options::=--force-confdef', u'install', u'dnsmasq'] in directory '/root'
+[INFO    ] Executing command [u'dpkg-query', u'--showformat', u'${Status} ${Package} ${Version} ${Architecture}', u'-W'] in directory '/root'
+[INFO    ] Made the following changes:
+'dnsmasq' changed from 'absent' to '2.79-1'
+
+[DEBUG   ] Refreshing modules...
+[INFO    ] Loading fresh modules for state activity
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[INFO    ] Completed state [dnsmasq] at time 13:43:58.221774 (duration_in_ms=8291.492)
+[DEBUG   ] LazyLoaded config.option
+[DEBUG   ] LazyLoaded file.managed
+[INFO    ] Running state [/etc/dnsmasq.d/basics] at time 13:43:58.237434
+[INFO    ] Executing state file.managed for [/etc/dnsmasq.d/basics]
+[DEBUG   ] LazyLoaded file.user_to_uid
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Executing command [u'lsattr', u'/etc/dnsmasq.d/basics'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/dnsmasq.d/basics
+[DEBUG   ] output: --------------e--- /etc/dnsmasq.d/basics
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/dnsmasq.d/basics] at time 13:43:58.287113 (duration_in_ms=49.68)
+[INFO    ] Running state [/etc/dnsmasq.d/consul] at time 13:43:58.287376
+[INFO    ] Executing state file.managed for [/etc/dnsmasq.d/consul]
+[INFO    ] Executing command [u'lsattr', u'/etc/dnsmasq.d/consul'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/dnsmasq.d/consul
+[DEBUG   ] output: --------------e--- /etc/dnsmasq.d/consul
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/dnsmasq.d/consul] at time 13:43:58.297146 (duration_in_ms=9.77)
+[INFO    ] Running state [/etc/dnsmasq.d/this] at time 13:43:58.297408
+[INFO    ] Executing state file.managed for [/etc/dnsmasq.d/this]
+[INFO    ] Executing command [u'lsattr', u'/etc/dnsmasq.d/this'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/dnsmasq.d/this
+[DEBUG   ] output: --------------e--- /etc/dnsmasq.d/this
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/dnsmasq.d/this] at time 13:43:58.309494 (duration_in_ms=12.086)
+[DEBUG   ] LazyLoaded systemd.booted
+[DEBUG   ] LazyLoaded service.start
+[DEBUG   ] LazyLoaded service.running
+[INFO    ] Running state [dnsmasq] at time 13:43:59.940376
+[INFO    ] Executing state service.running for [dnsmasq]
+[INFO    ] Executing command [u'systemctl', 'status', u'dnsmasq.service', u'-n', u'0'] in directory '/root'
+[DEBUG   ] stdout: * dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server
+   Loaded: loaded (/lib/systemd/system/dnsmasq.service; enabled; vendor preset: enabled)
+   Active: active (running) since Fri 2018-11-02 13:43:55 UTC; 4s ago
+ Main PID: 5891 (dnsmasq)
+    Tasks: 1 (limit: 547)
+   CGroup: /system.slice/dnsmasq.service
+           `-5891 /usr/sbin/dnsmasq -x /run/dnsmasq/dnsmasq.pid -u dnsmasq -7 /etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new --local-service --trust-anchor=.,19036,8,2,49aac11d7b6f6446702e54a1607371607a1a41855200fd2ce1cdde32f24e8fb5 --trust-anchor=.,20326,8,2,e06d44b80b8f1d39a95c0b0d7c65d08458e880409bbc683457104237c7f8ec8d
+[INFO    ] Executing command [u'systemctl', 'is-active', u'dnsmasq.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'dnsmasq.service'] in directory '/root'
+[DEBUG   ] stdout: enabled
+[INFO    ] The service dnsmasq is already running
+[INFO    ] Completed state [dnsmasq] at time 13:43:59.977515 (duration_in_ms=37.14)
+[INFO    ] Running state [dnsmasq] at time 13:43:59.977680
+[INFO    ] Executing state service.mod_watch for [dnsmasq]
+[INFO    ] Executing command [u'systemctl', 'is-active', u'dnsmasq.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[DEBUG   ] LazyLoaded service.full_restart
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'restart', u'dnsmasq.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-r6125a5693be145fa88baa47ecb957c60.scope
+[INFO    ] {u'dnsmasq': True}
+[INFO    ] Completed state [dnsmasq] at time 13:44:00.140269 (duration_in_ms=162.588)
+[DEBUG   ] LazyLoaded archive.extracted
+[INFO    ] Running state [/usr/local/sbin] at time 13:44:00.146102
+[INFO    ] Executing state archive.extracted for [/usr/local/sbin]
+[DEBUG   ] Requesting URL https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip using GET method
+[DEBUG   ] Using backend: tornado
+[DEBUG   ] file.cached: {u'comment': u'File is already cached to /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip with hash a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac', u'changes': {u'hash': {u'new': 'a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac', u'old': None}}, u'name': u'https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip', u'result': True}
+[DEBUG   ] Using checksum file /var/cache/salt/minion/archive_hash/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip.hash for cached archive file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+[DEBUG   ] Using checksum file /var/cache/salt/minion/archive_hash/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip.hash for cached archive file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+[DEBUG   ] Checking https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip to see if it is password-protected
+[DEBUG   ] Extracting /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip to /usr/local/sbin/
+[DEBUG   ] Keeping cached source file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+[INFO    ] {u'extracted_files': ['consul']}
+[INFO    ] Completed state [/usr/local/sbin] at time 13:44:05.479825 (duration_in_ms=5333.722)
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Running state [chmod a+x /usr/local/sbin/consul] at time 13:44:05.486996
+[INFO    ] Executing state cmd.run for [chmod a+x /usr/local/sbin/consul]
+[INFO    ] Executing command 'chmod a+x /usr/local/sbin/consul' in directory '/root'
+[INFO    ] {u'pid': 6038, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [chmod a+x /usr/local/sbin/consul] at time 13:44:05.520177 (duration_in_ms=33.181)
+[INFO    ] Running state [/etc/consul/consul.json] at time 13:44:05.520496
+[INFO    ] Executing state file.managed for [/etc/consul/consul.json]
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] Creating directory: /etc/consul
+[INFO    ] Executing command [u'lsattr', u'/etc/consul/consul.json'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/consul/consul.json
+[DEBUG   ] output: --------------e--- /etc/consul/consul.json
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/consul/consul.json] at time 13:44:05.608887 (duration_in_ms=88.387)
+[INFO    ] Running state [/etc/consul/scripts] at time 13:44:05.609480
+[INFO    ] Executing state file.copy for [/etc/consul/scripts]
+[INFO    ] {u'/etc/consul/scripts': u'/srv/salt/consul/scripts'}
+[INFO    ] Completed state [/etc/consul/scripts] at time 13:44:05.625346 (duration_in_ms=15.866)
+[INFO    ] Running state [/etc/consul/node-healthchecks.json] at time 13:44:05.626591
+[INFO    ] Executing state file.managed for [/etc/consul/node-healthchecks.json]
+[INFO    ] Executing command [u'lsattr', u'/etc/consul/node-healthchecks.json'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/consul/node-healthchecks.json
+[DEBUG   ] output: --------------e--- /etc/consul/node-healthchecks.json
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/consul/node-healthchecks.json] at time 13:44:05.649563 (duration_in_ms=22.972)
+[INFO    ] Running state [/etc/systemd/system/consul.service] at time 13:44:05.649866
+[INFO    ] Executing state file.managed for [/etc/systemd/system/consul.service]
+[INFO    ] Executing command [u'lsattr', u'/etc/systemd/system/consul.service'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/systemd/system/consul.service
+[DEBUG   ] output: --------------e--- /etc/systemd/system/consul.service
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/systemd/system/consul.service] at time 13:44:05.673489 (duration_in_ms=23.623)
+[DEBUG   ] LazyLoaded group.present
+[INFO    ] Running state [consul] at time 13:44:05.676755
+[INFO    ] Executing state group.present for [consul]
+[INFO    ] Executing command [u'groupadd', u'-r', u'consul'] in directory '/root'
+[DEBUG   ] LazyLoaded test.ping
+[INFO    ] {u'passwd': 'x', u'gid': 999, u'name': 'consul', u'members': []}
+[INFO    ] Completed state [consul] at time 13:44:05.873082 (duration_in_ms=196.328)
+[DEBUG   ] LazyLoaded user.present
+[INFO    ] Running state [consul] at time 13:44:05.878048
+[INFO    ] Executing state user.present for [consul]
+[DEBUG   ] LazyLoaded user.info
+[INFO    ] Executing command [u'useradd', u'-g', 999, u'-m', u'-d', u'/var/consul', u'-r', u'consul'] in directory '/root'
+[INFO    ] {u'shell': '/bin/sh', u'workphone': u'', u'uid': 999, u'passwd': 'x', u'roomnumber': u'', u'groups': ['consul'], u'home': '/var/consul', u'name': 'consul', u'gid': 999, u'fullname': u'', u'other': u'', u'homephone': u''}
+[INFO    ] Completed state [consul] at time 13:44:06.008856 (duration_in_ms=130.808)
+[INFO    ] Running state [/var/consul] at time 13:44:06.010188
+[INFO    ] Executing state file.directory for [/var/consul]
+[INFO    ] The directory /var/consul is in the correct state
+[INFO    ] Completed state [/var/consul] at time 13:44:06.012572 (duration_in_ms=2.383)
+[INFO    ] Running state [consul] at time 13:44:06.013836
+[INFO    ] Executing state service.running for [consul]
+[INFO    ] Executing command [u'systemctl', 'status', u'consul.service', u'-n', u'0'] in directory '/root'
+[DEBUG   ] stdout: * consul.service - consul agent
+   Loaded: loaded (/etc/systemd/system/consul.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-active', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: inactive
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'start', u'consul.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-r6e6c9f0e38374f648ba01b9448264147.scope
+[INFO    ] Executing command [u'systemctl', 'is-active', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'enable', u'consul.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-r8943f9001d2a4738a6402d42decb7c7f.scope
+Created symlink /etc/systemd/system/multi-user.target.wants/consul.service -> /etc/systemd/system/consul.service.
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'consul.service'] in directory '/root'
+[DEBUG   ] stdout: enabled
+[INFO    ] {u'consul': True}
+[INFO    ] Completed state [consul] at time 13:44:06.985785 (duration_in_ms=971.949)
+[INFO    ] Running state [systemctl daemon-reload] at time 13:44:06.990387
+[INFO    ] Executing state cmd.run for [systemctl daemon-reload]
+[INFO    ] Executing command 'systemctl daemon-reload' in directory '/root'
+[INFO    ] {u'pid': 6120, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl daemon-reload] at time 13:44:07.452805 (duration_in_ms=462.418)
+[INFO    ] Running state [systemctl reload consul] at time 13:44:07.457776
+[INFO    ] Executing state cmd.run for [systemctl reload consul]
+[INFO    ] Executing command 'systemctl reload consul' in directory '/root'
+[ERROR   ] Command 'systemctl reload consul' failed with return code: 1
+[ERROR   ] stderr: Job for consul.service failed because the control process exited with error code.
+See "systemctl status consul.service" and "journalctl -xe" for details.
+[ERROR   ] retcode: 1
+[ERROR   ] {u'pid': 6157, u'retcode': 1, u'stderr': u'Job for consul.service failed because the control process exited with error code.\nSee "systemctl status consul.service" and "journalctl -xe" for details.', u'stdout': u''}
+[INFO    ] Completed state [systemctl reload consul] at time 13:44:07.573461 (duration_in_ms=115.685)
+[INFO    ] Running state [systemctl restart consul] at time 13:44:07.577171
+[INFO    ] Executing state cmd.run for [systemctl restart consul]
+[INFO    ] Executing command 'systemctl restart consul' in directory '/root'
+[INFO    ] {u'pid': 6165, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl restart consul] at time 13:44:18.667276 (duration_in_ms=11090.104)
+[DEBUG   ] LazyLoaded pkg.installed
+[INFO    ] Running state [docker package dependencies] at time 13:44:18.683667
+[INFO    ] Executing state pkg.installed for [docker package dependencies]
+[DEBUG   ] DSC: Only available on Windows systems
+[DEBUG   ] Module PSGet: Only available on Windows systems
+[DEBUG   ] LazyLoaded platform.is_windows
+[DEBUG   ] Could not LazyLoad pkg.resolve_capabilities: 'pkg.resolve_capabilities' is not available.
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[INFO    ] All specified packages are already installed
+[INFO    ] Completed state [docker package dependencies] at time 13:44:19.128489 (duration_in_ms=444.821)
+[DEBUG   ] LazyLoaded pkgrepo.managed
+[INFO    ] Running state [deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable] at time 13:44:19.132007
+[INFO    ] Executing state pkgrepo.managed for [deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable]
+[DEBUG   ] Requesting URL https://download.docker.com/linux/ubuntu/gpg using GET method
+[DEBUG   ] Using backend: tornado
+[INFO    ] Executing command [u'apt-key', u'add', u'/var/cache/salt/minion/extrn_files/base/download.docker.com/linux/ubuntu/gpg'] in directory '/root'
+[DEBUG   ] stdout: OK
+[DEBUG   ] stderr: Warning: apt-key output should not be parsed (stdout is not a terminal)
+[INFO    ] Executing command [u'apt-get', u'-q', u'update'] in directory '/root'
+[INFO    ] {u'repo': u'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'}
+[INFO    ] Completed state [deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable] at time 13:44:27.111255 (duration_in_ms=7979.247)
+[INFO    ] Running state [docker-ce] at time 13:44:27.132009
+[INFO    ] Executing state pkg.installed for [docker-ce]
+[DEBUG   ] Could not LazyLoad pkg.resolve_capabilities: 'pkg.resolve_capabilities' is not available.
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[DEBUG   ] Could not LazyLoad pkg.check_db: 'pkg.check_db' is not available.
+[DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
+[INFO    ] Executing command [u'dpkg', u'--get-selections', u'*'] in directory '/root'
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'apt-get', u'-q', u'-y', u'-o', u'DPkg::Options::=--force-confold', u'-o', u'DPkg::Options::=--force-confdef', u'install', u'docker-ce'] in directory '/root'
+[INFO    ] Executing command [u'dpkg-query', u'--showformat', u'${Status} ${Package} ${Version} ${Architecture}', u'-W'] in directory '/root'
+[INFO    ] Made the following changes:
+'libltdl7' changed from 'absent' to '2.4.6-2'
+'pigz' changed from 'absent' to '2.4-1'
+'aufs-tools' changed from 'absent' to '1:4.9+20170918-1ubuntu1'
+'docker-ce' changed from 'absent' to '18.06.1~ce~3-0~ubuntu'
+'cgroupfs-mount' changed from 'absent' to '1.4'
+
+[DEBUG   ] Refreshing modules...
+[INFO    ] Loading fresh modules for state activity
+[DEBUG   ] LazyLoaded jinja.render
+[DEBUG   ] LazyLoaded yaml.render
+[INFO    ] Completed state [docker-ce] at time 13:54:06.001214 (duration_in_ms=578869.206)
+[DEBUG   ] LazyLoaded config.option
+[DEBUG   ] LazyLoaded file.managed
+[INFO    ] Running state [/etc/docker/daemon.json] at time 13:54:06.026469
+[INFO    ] Executing state file.managed for [/etc/docker/daemon.json]
+[DEBUG   ] LazyLoaded file.user_to_uid
+[DEBUG   ] LazyLoaded cp.is_cached
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Executing command [u'lsattr', u'/etc/docker/daemon.json'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/docker/daemon.json
+[DEBUG   ] output: --------------e--- /etc/docker/daemon.json
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/docker/daemon.json] at time 13:54:06.122452 (duration_in_ms=95.983)
+[DEBUG   ] LazyLoaded systemd.booted
+[DEBUG   ] LazyLoaded service.start
+[DEBUG   ] LazyLoaded service.running
+[INFO    ] Running state [docker] at time 13:54:07.860116
+[INFO    ] Executing state service.running for [docker]
+[INFO    ] Executing command [u'systemctl', 'status', u'docker.service', u'-n', u'0'] in directory '/root'
+[DEBUG   ] stdout: * docker.service - Docker Application Container Engine
+   Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+   Active: active (running) since Fri 2018-11-02 13:44:46 UTC; 9min ago
+     Docs: https://docs.docker.com
+ Main PID: 7857 (dockerd)
+    Tasks: 18
+   CGroup: /system.slice/docker.service
+           |-7857 /usr/bin/dockerd -H fd://
+           `-7877 docker-containerd --config /var/run/docker/containerd/containerd.toml
+[INFO    ] Executing command [u'systemctl', 'is-active', u'docker.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'docker.service'] in directory '/root'
+[DEBUG   ] stdout: enabled
+[INFO    ] The service docker is already running
+[INFO    ] Completed state [docker] at time 13:54:07.920562 (duration_in_ms=60.445)
+[INFO    ] Running state [docker] at time 13:54:07.920739
+[INFO    ] Executing state service.mod_watch for [docker]
+[INFO    ] Executing command [u'systemctl', 'is-active', u'docker.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[DEBUG   ] LazyLoaded service.full_restart
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'restart', u'docker.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-rd3c901c9ffae43f8b98624201a090b2e.scope
+[INFO    ] {u'docker': True}
+[INFO    ] Completed state [docker] at time 13:54:10.841530 (duration_in_ms=2920.791)
+[INFO    ] Running state [/usr/local/bin/docker-compose] at time 13:54:10.846681
+[INFO    ] Executing state file.managed for [/usr/local/bin/docker-compose]
+[DEBUG   ] Requesting URL https://github.com/docker/compose/releases/download/1.23.0/docker-compose-Linux-x86_64 using GET method
+[DEBUG   ] Using backend: tornado
+[INFO    ] Executing command [u'lsattr', u'/usr/local/bin/docker-compose'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /usr/local/bin/docker-compose
+[DEBUG   ] output: --------------e--- /usr/local/bin/docker-compose
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/usr/local/bin/docker-compose] at time 13:54:13.490472 (duration_in_ms=2643.789)
+[DEBUG   ] LazyLoaded archive.extracted
+[INFO    ] Running state [/usr/local/sbin] at time 13:54:13.500892
+[INFO    ] Executing state archive.extracted for [/usr/local/sbin]
+[DEBUG   ] Requesting URL https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip using GET method
+[DEBUG   ] Using backend: tornado
+[DEBUG   ] file.cached: {u'comment': u'File is already cached to /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip with hash 7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c', u'changes': {u'hash': {u'new': '7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c', u'old': None}}, u'name': u'https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip', u'result': True}
+[DEBUG   ] Using checksum file /var/cache/salt/minion/archive_hash/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip.hash for cached archive file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip
+[DEBUG   ] Using checksum file /var/cache/salt/minion/archive_hash/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip.hash for cached archive file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip
+[DEBUG   ] Checking https://releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip to see if it is password-protected
+[DEBUG   ] Extracting /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip to /usr/local/sbin/
+[DEBUG   ] Keeping cached source file /var/cache/salt/minion/extrn_files/base/releases.hashicorp.com/nomad/0.8.6/nomad_0.8.6_linux_amd64.zip
+[INFO    ] {u'extracted_files': ['nomad']}
+[INFO    ] Completed state [/usr/local/sbin] at time 13:54:16.494872 (duration_in_ms=2993.978)
+[DEBUG   ] LazyLoaded cmd.run
+[INFO    ] Running state [chmod a+x /usr/local/sbin/nomad] at time 13:54:16.506937
+[INFO    ] Executing state cmd.run for [chmod a+x /usr/local/sbin/nomad]
+[INFO    ] Executing command 'chmod a+x /usr/local/sbin/nomad' in directory '/root'
+[INFO    ] {u'pid': 8646, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [chmod a+x /usr/local/sbin/nomad] at time 13:54:16.570632 (duration_in_ms=63.694)
+[INFO    ] Running state [/var/nomad] at time 13:54:16.573597
+[INFO    ] Executing state file.directory for [/var/nomad]
+[INFO    ] {u'/var/nomad': u'New Dir'}
+[INFO    ] Completed state [/var/nomad] at time 13:54:16.610267 (duration_in_ms=36.672)
+[INFO    ] Running state [/etc/systemd/system/nomad-client.service] at time 13:54:16.612326
+[INFO    ] Executing state file.managed for [/etc/systemd/system/nomad-client.service]
+[INFO    ] Executing command [u'lsattr', u'/etc/systemd/system/nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/systemd/system/nomad-client.service
+[DEBUG   ] output: --------------e--- /etc/systemd/system/nomad-client.service
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/systemd/system/nomad-client.service] at time 13:54:16.648671 (duration_in_ms=36.343)
+[INFO    ] Running state [/etc/systemd/system/nomad-server.service] at time 13:54:16.652560
+[INFO    ] Executing state file.managed for [/etc/systemd/system/nomad-server.service]
+[INFO    ] Executing command [u'lsattr', u'/etc/systemd/system/nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/systemd/system/nomad-server.service
+[DEBUG   ] output: --------------e--- /etc/systemd/system/nomad-server.service
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/systemd/system/nomad-server.service] at time 13:54:16.689818 (duration_in_ms=37.257)
+[INFO    ] Running state [systemctl daemon-reload] at time 13:54:16.690980
+[INFO    ] Executing state cmd.run for [systemctl daemon-reload]
+[INFO    ] Executing command 'systemctl daemon-reload' in directory '/root'
+[INFO    ] {u'pid': 8650, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl daemon-reload] at time 13:54:17.015951 (duration_in_ms=324.971)
+[INFO    ] Running state [/etc/nomad/client/client.json] at time 13:54:17.016278
+[INFO    ] Executing state file.managed for [/etc/nomad/client/client.json]
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] Creating directory: /etc/nomad
+[DEBUG   ] Creating directory: /etc/nomad/client
+[INFO    ] Executing command [u'lsattr', u'/etc/nomad/client/client.json'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/nomad/client/client.json
+[DEBUG   ] output: --------------e--- /etc/nomad/client/client.json
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/nomad/client/client.json] at time 13:54:17.112116 (duration_in_ms=95.838)
+[INFO    ] Running state [nomad-client] at time 13:54:17.112953
+[INFO    ] Executing state service.running for [nomad-client]
+[INFO    ] Executing command [u'systemctl', 'status', u'nomad-client.service', u'-n', u'0'] in directory '/root'
+[DEBUG   ] stdout: * nomad-client.service - nomad client
+   Loaded: loaded (/etc/systemd/system/nomad-client.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-active', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: inactive
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'start', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-rc10b68bbfa6a4ffa8e3b6119acb215f7.scope
+[INFO    ] Executing command [u'systemctl', 'is-active', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'enable', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-re010a0fe345f4bd98f8d895a45a57c05.scope
+Created symlink /etc/systemd/system/multi-user.target.wants/nomad-client.service -> /etc/systemd/system/nomad-client.service.
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-client.service'] in directory '/root'
+[DEBUG   ] stdout: enabled
+[INFO    ] {u'nomad-client': True}
+[INFO    ] Completed state [nomad-client] at time 13:54:17.849215 (duration_in_ms=736.262)
+[INFO    ] Running state [systemctl reload nomad-client] at time 13:54:17.855892
+[INFO    ] Executing state cmd.run for [systemctl reload nomad-client]
+[INFO    ] Executing command 'systemctl reload nomad-client' in directory '/root'
+[INFO    ] {u'pid': 8758, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl reload nomad-client] at time 13:54:17.952212 (duration_in_ms=96.32)
+[INFO    ] Running state [systemctl restart nomad-client] at time 13:54:17.953932
+[INFO    ] Executing state cmd.run for [systemctl restart nomad-client]
+[INFO    ] Executing command 'systemctl restart nomad-client' in directory '/root'
+[INFO    ] {u'pid': 8760, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl restart nomad-client] at time 13:54:17.984058 (duration_in_ms=30.127)
+[INFO    ] Running state [/etc/nomad/server/server.json] at time 13:54:17.984819
+[INFO    ] Executing state file.managed for [/etc/nomad/server/server.json]
+[DEBUG   ] Jinja search path: [u'/var/cache/salt/minion/files/base']
+[DEBUG   ] LazyLoaded roots.envs
+[DEBUG   ] Could not LazyLoad roots.init: 'roots.init' is not available.
+[DEBUG   ] Creating directory: /etc/nomad/server
+[INFO    ] Executing command [u'lsattr', u'/etc/nomad/server/server.json'] in directory '/root'
+[DEBUG   ] stdout: --------------e--- /etc/nomad/server/server.json
+[DEBUG   ] output: --------------e--- /etc/nomad/server/server.json
+[INFO    ] File changed:
+New file
+[INFO    ] Completed state [/etc/nomad/server/server.json] at time 13:54:18.093782 (duration_in_ms=108.963)
+[INFO    ] Running state [nomad-server] at time 13:54:18.096104
+[INFO    ] Executing state service.running for [nomad-server]
+[INFO    ] Executing command [u'systemctl', 'status', u'nomad-server.service', u'-n', u'0'] in directory '/root'
+[DEBUG   ] stdout: * nomad-server.service - nomad server
+   Loaded: loaded (/etc/systemd/system/nomad-server.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-active', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: inactive
+[DEBUG   ] retcode: 3
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'start', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-rb31f6fa896bb4b5ebcd917aa67b8e81e.scope
+[INFO    ] Executing command [u'systemctl', 'is-active', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: active
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: disabled
+[DEBUG   ] retcode: 1
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[DEBUG   ] sysvinit script 'ufw' found, but systemd unit 'ufw.service' already exists
+[DEBUG   ] sysvinit script 'plymouth-log' found, but systemd unit 'plymouth-log.service' already exists
+[DEBUG   ] sysvinit script 'uuidd' found, but systemd unit 'uuidd.service' already exists
+[DEBUG   ] sysvinit script 'ebtables' found, but systemd unit 'ebtables.service' already exists
+[DEBUG   ] sysvinit script 'apparmor' found, but systemd unit 'apparmor.service' already exists
+[DEBUG   ] sysvinit script 'irqbalance' found, but systemd unit 'irqbalance.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks' found, but systemd unit 'cryptdisks.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmetad' found, but systemd unit 'lvm2-lvmetad.service' already exists
+[DEBUG   ] sysvinit script 'mdadm-waitidle' found, but systemd unit 'mdadm-waitidle.service' already exists
+[DEBUG   ] sysvinit script 'acpid' found, but systemd unit 'acpid.service' already exists
+[DEBUG   ] sysvinit script 'mdadm' found, but systemd unit 'mdadm.service' already exists
+[DEBUG   ] sysvinit script 'lvm2' found, but systemd unit 'lvm2.service' already exists
+[DEBUG   ] sysvinit script 'docker' found, but systemd unit 'docker.service' already exists
+[DEBUG   ] sysvinit script 'cryptdisks-early' found, but systemd unit 'cryptdisks-early.service' already exists
+[DEBUG   ] sysvinit script 'open-vm-tools' found, but systemd unit 'open-vm-tools.service' already exists
+[DEBUG   ] sysvinit script 'ubuntu-fan' found, but systemd unit 'ubuntu-fan.service' already exists
+[DEBUG   ] sysvinit script 'atd' found, but systemd unit 'atd.service' already exists
+[DEBUG   ] sysvinit script 'iscsid' found, but systemd unit 'iscsid.service' already exists
+[DEBUG   ] sysvinit script 'lxd' found, but systemd unit 'lxd.service' already exists
+[DEBUG   ] sysvinit script 'procps' found, but systemd unit 'procps.service' already exists
+[DEBUG   ] sysvinit script 'rsyslog' found, but systemd unit 'rsyslog.service' already exists
+[DEBUG   ] sysvinit script 'cron' found, but systemd unit 'cron.service' already exists
+[DEBUG   ] sysvinit script 'salt-minion' found, but systemd unit 'salt-minion.service' already exists
+[DEBUG   ] sysvinit script 'screen-cleanup' found, but systemd unit 'screen-cleanup.service' already exists
+[DEBUG   ] sysvinit script 'udev' found, but systemd unit 'udev.service' already exists
+[DEBUG   ] sysvinit script 'open-iscsi' found, but systemd unit 'open-iscsi.service' already exists
+[DEBUG   ] sysvinit script 'unattended-upgrades' found, but systemd unit 'unattended-upgrades.service' already exists
+[DEBUG   ] sysvinit script 'dnsmasq' found, but systemd unit 'dnsmasq.service' already exists
+[DEBUG   ] sysvinit script 'ssh' found, but systemd unit 'ssh.service' already exists
+[DEBUG   ] sysvinit script 'cgroupfs-mount' found, but systemd unit 'cgroupfs-mount.service' already exists
+[DEBUG   ] sysvinit script 'kmod' found, but systemd unit 'kmod.service' already exists
+[DEBUG   ] sysvinit script 'lvm2-lvmpolld' found, but systemd unit 'lvm2-lvmpolld.service' already exists
+[DEBUG   ] sysvinit script 'dbus' found, but systemd unit 'dbus.service' already exists
+[DEBUG   ] sysvinit script 'lxcfs' found, but systemd unit 'lxcfs.service' already exists
+[DEBUG   ] sysvinit script 'plymouth' found, but systemd unit 'plymouth.service' already exists
+[DEBUG   ] sysvinit script 'rsync' found, but systemd unit 'rsync.service' already exists
+[DEBUG   ] sysvinit script 'virtualbox-guest-utils' found, but systemd unit 'virtualbox-guest-utils.service' already exists
+[INFO    ] Executing command [u'systemd-run', u'--scope', u'systemctl', 'enable', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stderr: Running scope as unit: run-r8dad9b6516214edcb0e50363db945c48.scope
+Created symlink /etc/systemd/system/multi-user.target.wants/nomad-server.service -> /etc/systemd/system/nomad-server.service.
+[INFO    ] Executing command [u'systemctl', 'is-enabled', u'nomad-server.service'] in directory '/root'
+[DEBUG   ] stdout: enabled
+[INFO    ] {u'nomad-server': True}
+[INFO    ] Completed state [nomad-server] at time 13:54:19.001198 (duration_in_ms=905.095)
+[INFO    ] Running state [systemctl reload nomad-server] at time 13:54:19.016659
+[INFO    ] Executing state cmd.run for [systemctl reload nomad-server]
+[INFO    ] Executing command 'systemctl reload nomad-server' in directory '/root'
+[INFO    ] {u'pid': 8871, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl reload nomad-server] at time 13:54:19.105513 (duration_in_ms=88.854)
+[INFO    ] Running state [systemctl restart nomad-server] at time 13:54:19.107376
+[INFO    ] Executing state cmd.run for [systemctl restart nomad-server]
+[INFO    ] Executing command 'systemctl restart nomad-server' in directory '/root'
+[INFO    ] {u'pid': 8873, u'retcode': 0, u'stderr': u'', u'stdout': u''}
+[INFO    ] Completed state [systemctl restart nomad-server] at time 13:54:20.204084 (duration_in_ms=1096.708)
+[DEBUG   ] File /var/cache/salt/minion/accumulator/140394448136080 does not exist, no need to cleanup
+[DEBUG   ] LazyLoaded state.check_result
+[DEBUG   ] LazyLoaded highstate.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
+[DEBUG   ] LazyLoaded nested.output
