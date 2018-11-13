@@ -1,3 +1,9 @@
+# TODO: Remove /etc/resolv.conf
+
+# TODO: Disable systemd-resolved
+
+# TODO: Stop systemd-resolved
+
 dnsmasq package:
   pkg.installed:
     - name: dnsmasq
@@ -23,6 +29,16 @@ dnsmasq config consul:
     - makedirs: True
     - contents: server=/cluster/{{ pillar['frontend IP address'] }}#8600
 
+dnsmasq upstream config:
+ file.managed:
+   - name: /etc/dnsmasq.d/upstream
+   - user: root
+   - group: root
+   - mode: 644
+   - makedirs: True
+   - contents:
+     - server=8.8.8.8
+
 dnsmasq config this:
   file.managed:
     - name: /etc/dnsmasq.d/this
@@ -42,4 +58,5 @@ dnsmasq service:
     - watch:
       - file: dnsmasq config basic
       - file: dnsmasq config consul
+      - file: dnsmasq upstream config
       - file: dnsmasq config this

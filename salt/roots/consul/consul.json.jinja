@@ -2,7 +2,6 @@
 {%- for consulIP in ["172.16.0.1", "172.16.0.2", "172.16.0.3"] if not consulIP == pillar['frontend IP address'] -%}
 	{%- do serverList.append(consulIP) -%}
 {%- endfor -%}
-
 {
 	"datacenter": "cluster-dev",
 	"data_dir": "/var/consul",

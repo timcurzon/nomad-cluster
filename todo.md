@@ -38,9 +38,18 @@ DNSMasq notes:
   - Config files ✔
   - systemctl service ✔
   - Healthchecks + scripts ✔
-5. Vault
+  - Reload command failing - investigate
+    ```
+    Error reloading: Put http://127.0.0.1:8500/v1/agent/reload: dial tcp 127.0.0.1:8500: connect: connection refused
+    ```
+5. Further DNSMasq config (prior to DNSMasq install)
+  - Remove /etc/resolv.conf: `rm /etc/resolv.conf`
+  - Disable systemd-resolved: `systemctl disable systemd-resolved`
+  - Stop systemd-resolved: `systemctl stop systemd-resolved`
+
+6. Vault
   - Check reqs
   - Re-enable in nomad server config
-6. System test
+7. System test
   - Consul + Vault
   - Nomad
