@@ -1,9 +1,3 @@
-# TODO: Remove /etc/resolv.conf
-
-# TODO: Disable systemd-resolved
-
-# TODO: Stop systemd-resolved
-
 dnsmasq package:
   pkg.installed:
     - name: dnsmasq
@@ -60,3 +54,16 @@ dnsmasq service:
       - file: dnsmasq config consul
       - file: dnsmasq upstream config
       - file: dnsmasq config this
+
+dnsmasq disable systemd-resolved:
+  service.dead:
+    - name: systemd-resolved
+    - enable: False
+    - require:
+      - service: dnsmasq service
+
+dnsmasq remove resolvconf:
+  file.absent:
+    - name: /etc/resolv.conf
+    - require:
+      - service: dnsmasq service

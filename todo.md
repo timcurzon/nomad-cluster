@@ -42,10 +42,13 @@ DNSMasq notes:
     ```
     Error reloading: Put http://127.0.0.1:8500/v1/agent/reload: dial tcp 127.0.0.1:8500: connect: connection refused
     ```
+    - Needs IP address of http server (bound to front IP currently)
+    - Add 127.0.0.1 to consul.json `client_addr` definition (???) ... OR ...
+    - Add `-http-addr=` option to the service reload command (convert service def to Jinja template) & set the `CONSUL_HTTP_ADDR` environment variable
 5. Further DNSMasq config (prior to DNSMasq install)
-  - Remove /etc/resolv.conf: `rm /etc/resolv.conf`
-  - Disable systemd-resolved: `systemctl disable systemd-resolved`
-  - Stop systemd-resolved: `systemctl stop systemd-resolved`
+  - Remove /etc/resolv.conf: `rm /etc/resolv.conf` ✔
+  - Disable systemd-resolved: `systemctl disable systemd-resolved` ✔
+  - Stop systemd-resolved: `systemctl stop systemd-resolved` ✔
 
 6. Vault
   - Check reqs
