@@ -15,12 +15,12 @@ advertise {
 
 consul {
 	# This MUST be a consistent consul agent address and it makes sense to use the local one
-	address = "front.this.node.cluster:8500"
+	address = "{{ pillar['frontend IP address'] }}:8500"
 }
 
 server {
 	enabled = true
-	bootstrap_expect = 3
+	bootstrap_expect = {{ pillar['node count'] }}
 	num_schedulers = 2
 	rejoin_after_leave = true
 	encrypt = "8sfUDokS8ehEsfbj9ysdaf=="

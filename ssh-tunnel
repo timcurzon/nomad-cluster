@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -p 2222 -L8080:172.30.0.1:4646 -o StrictHostKeyChecking=off -i .vagrant/machines/node-1/virtualbox/private_key vagrant@127.0.0.1

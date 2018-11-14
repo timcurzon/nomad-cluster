@@ -10,7 +10,7 @@
 	"retry_join": [{{ '"' ~ serverList|join('","') ~ '"' }}],
 	"retry_max": 20,
 {% if pillar['consul server'] %}
-	"bootstrap_expect": 3,
+	"bootstrap_expect": {{ pillar['node count'] }},
 {% endif %}
 	"skip_leave_on_interrupt": false,
 	"encrypt": "{{ pillar['consul gossip encryption key'] }}",

@@ -13,7 +13,7 @@ advertise {
 
 consul {
 	# This MUST be a consistent consul agent address and it makes sense to use the local one
-	address = "front.this.node.cluster:8500"
+	address = "{{ pillar['frontend IP address'] }}:8500"
 }
 
 client {

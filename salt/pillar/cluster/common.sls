@@ -15,3 +15,6 @@ fan overlay cidr: 172.31.0.0/16
 
 # The symetric encryption key used for cosul's serf gossip protocol
 consul gossip encryption key: GHrF4UIY0j5y6CZqZE+X6g==
+
+# The number of nodes currently configured to run in the cluster
+node count: 1

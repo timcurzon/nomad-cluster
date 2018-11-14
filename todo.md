@@ -42,9 +42,11 @@ DNSMasq notes:
   - systemctl service ✔
   - Healthchecks + scripts ✔
   - Reload command fix ✔
-5. Vault
-  - Check reqs
+5. System test
+  - Consul ✔
+  - Nomad ✔
+6. Vault
+  - Setup as container or local binary?
   - Re-enable in nomad server config
-6. System test
-  - Consul + Vault
-  - Nomad
+7. Fabio
+  - Setup container (talks to Consul DNS)
