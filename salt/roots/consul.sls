@@ -17,6 +17,13 @@ consul after install:
     - onchanges:
       - archive: consul install
 
+consul environment variables:
+ file.append:
+    - name: /etc/environment
+    - text: CONSUL_HTTP_ADDR={{ pillar['frontend IP address'] }}:8500
+    - require:
+      - archive: consul install
+
 consul config:
   file.managed:
     - name: /etc/consul/consul.json
@@ -48,7 +55,8 @@ consul node healthcheck:
 consul startup script:
   file.managed:
     - name: /etc/systemd/system/consul.service
-    - source: /srv/salt/consul/consul.service
+    - source: /srv/salt/consul/consul.service.jinja
+    - template: jinja
     - user: root
     - group: root
     - mode: 644

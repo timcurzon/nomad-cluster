@@ -7,7 +7,7 @@ After=network-online.target
 User=consul
 Group=consul
 ExecStart=/usr/local/sbin/consul agent -config-dir=/etc/consul
-ExecReload=/usr/local/sbin/consul reload
+ExecReload=/usr/local/sbin/consul reload -http-addr="{{ pillar['frontend IP address'] }}:8500"
 KillSignal=SIGINT
 KillMode=process
 Restart=on-failure
