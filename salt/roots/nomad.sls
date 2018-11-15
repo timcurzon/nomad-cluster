@@ -19,6 +19,13 @@ nomad after install:
     - onchanges:
       - archive: nomad install
   
+nomad environment variables:
+ file.append:
+    - name: /etc/environment
+    - text: NOMAD_ADDR=http://back.this.node.cluster:4646
+    - require:
+      - archive: nomad install
+
 nomad directory exists:
   file.directory:
     - name: /var/nomad

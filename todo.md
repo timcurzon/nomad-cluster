@@ -36,11 +36,13 @@ DNSMasq notes:
   - Config files ✔
   - systemctl client service ✔
   - systemctl server service ✔
+  - Environment variables ✔
 4. Consul
   - Binary install ✔
   - Config files ✔
   - systemctl service ✔
   - Healthchecks + scripts ✔
+  - Environment variables ✔
   - Reload command fix ✔
 5. System test
   - Consul ✔

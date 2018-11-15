@@ -1,0 +1,32 @@
+Host node-1
+    User vagrant
+    Port 2222
+    HostName 127.0.0.1
+    StrictHostKeyChecking off
+    IdentityFile .vagrant/machines/node-1/virtualbox/private_key
+    # Consul Web UI
+    LocalForward 8080 172.16.0.1:8500
+    # Nomad Web UI
+    LocalForward 8081 172.30.0.1:4646
+
+Host node-2
+    User vagrant
+    Port 2222
+    HostName 127.0.0.1
+    StrictHostKeyChecking off
+    IdentityFile .vagrant/machines/node-2/virtualbox/private_key
+    # Consul Web UI
+    LocalForward 8080 172.16.0.1:8500
+    # Nomad Web UI
+    LocalForward 8081 172.30.0.1:4646
+
+Host node-3
+    User vagrant
+    Port 2222
+    HostName 127.0.0.1
+    StrictHostKeyChecking off
+    IdentityFile .vagrant/machines/node-3/virtualbox/private_key
+    # Consul Web UI
+    LocalForward 8080 172.16.0.1:8500
+    # Nomad Web UI
+    LocalForward 8081 172.30.0.1:4646
