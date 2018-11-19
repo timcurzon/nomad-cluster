@@ -47,8 +47,13 @@ DNSMasq notes:
 5. System test
   - Consul ✔
   - Nomad ✔
-6. Vault
+6. General system setup
+  - Add vagrant user to docker group (sudo usermod -aG docker vagrant)
+7. Basic Test Service
+  - Nginx static page ✔
+  - Nomad definition
+8. Fabio
+  - Setup container (talks to Consul DNS)
+9. Vault
   - Setup as container or local binary?
   - Re-enable in nomad server config
-7. Fabio
-  - Setup container (talks to Consul DNS)
