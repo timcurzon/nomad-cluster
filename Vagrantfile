@@ -13,7 +13,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "salt/roots/", "/srv/salt"
   config.vm.synced_folder "salt/pillar/", "/srv/pillar"
-  config.vm.synced_folder "dockerfiles", "/dockerfiles"
+  config.vm.synced_folder "containers", "/containers"
+  config.vm.synced_folder "services", "/services"
 
   (1..1).each do |i|
     config.vm.define "node-#{i}" do |node|

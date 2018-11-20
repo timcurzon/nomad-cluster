@@ -48,7 +48,8 @@ DNSMasq notes:
   - Consul ✔
   - Nomad ✔
 6. General system setup
-  - Add vagrant user to docker group (sudo usermod -aG docker vagrant)
+  - Add vagrant user to docker group (sudo usermod -aG docker vagrant) ✔
+  - Build containers ✔
 7. Basic Test Service
   - Nginx static page ✔
   - Nomad definition

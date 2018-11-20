@@ -33,6 +33,14 @@ docker service:
     - watch:
       - file: docker config
 
+docker add vagrant user to group:
+  user.present:
+    - name: vagrant
+    - groups:
+      - docker
+    - require:
+      - service: docker service
+
 docker compose install:
   file.managed:
     - name: /usr/local/bin/docker-compose

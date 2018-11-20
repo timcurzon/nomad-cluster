@@ -6,3 +6,4 @@ base:
     - consul
     - docker
     - nomad
+    - containers
