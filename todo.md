@@ -49,12 +49,16 @@ DNSMasq notes:
   - Nomad ✔
 6. General system setup
   - Add vagrant user to docker group (sudo usermod -aG docker vagrant) ✔
-  - Build containers ✔
-7. Basic Test Service
-  - Nginx static page ✔
-  - Nomad definition
+  - Build local containers? (At least rename for local use)
+7. Create Test Service (Nginx static page) ✔
 8. Fabio
   - Setup container (talks to Consul DNS)
 9. Vault
   - Setup as container or local binary?
   - Re-enable in nomad server config
+
+## Bugs
+
+1. Nomad Docker services (nginxtest) using wrong IP address
+  - Docker network config used (see docker inspect), port mapping uses first host IP
+  - Service also available on containerOverlayIp:80 (!!)

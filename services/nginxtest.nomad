@@ -20,6 +20,7 @@ job "nginxtest" {
 
       service {
         address_mode = "driver"
+        name = "nginxtest"
         port = "http"
 
         check {
@@ -27,12 +28,13 @@ job "nginxtest" {
           path = "/"
           interval = "30s"
           timeout = "10s"
+          port = "http"
         }
       }
 
       env {
         "ENV_TESTVAL" = "nginx test env value 01"
-        "ENV_CHANGEME" = "trigger job change"
+        "ENV_CHANGEME" = "trigger job change 001"
       }
 
       resources {
