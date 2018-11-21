@@ -13,13 +13,18 @@ DNSMasq notes:
   * Point general *dev (service) domain at frontend IP > Consul
   * 'this' local names (this, front.this, back.this)
 
-1. Networking
+1. Networking (part 1)
   - Public frontend network ✘
   - 'Private' frontend network (172.16.0.0) ✔
   - 'Private' backend network (172.30.0.0) ✔
   - Test inter node connectivity over private network ✔
   - Fan networking setup ✔
-2. DNSMasq setup
+2. Networking (part 2)
+  - Setup VB Internal network type (backend, 1 iface per node)
+  - Setup VB Host only network type (frontend, 1 iface per node)
+  - Confirm fan network still working
+  - Confirm host -> box access (Consul, Nomad, nginxtest service)
+3. DNSMasq setup
   - Basic config ✔
   - Service domain ✔
   - 'this' local names ✔
