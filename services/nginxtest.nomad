@@ -2,9 +2,16 @@ job "nginxtest" {
   region = "global"
   datacenters = ["cluster-dev"]
   type = "service"
+
+  update {
+    max_parallel = 1
+    health_check = "checks"
+    min_healthy_time = "60s"
+    healthy_deadline = "5m"
+  }
   
   group "web" {
-    count = 1
+    count = 3
     
     task "static" {
       driver = "docker"
@@ -13,22 +20,20 @@ job "nginxtest" {
         volumes = [
           "/services/assets/index.html:/usr/share/nginx/html/index.html"
         ]
-        port_map = {
-          http = 80
-        }
       }
 
       service {
         address_mode = "driver"
         name = "nginxtest"
-        port = "http"
+        port = 80
 
         check {
+          address_mode = "driver"
           type = "http"
           path = "/"
           interval = "30s"
           timeout = "10s"
-          port = "http"
+          port = 80
         }
       }
 
@@ -39,11 +44,10 @@ job "nginxtest" {
 
       resources {
         cpu = 500
-        memory = 32
+        memory = 16
 
         network {
           mbits = 100
-          port "http" {}
         }
       }
     }

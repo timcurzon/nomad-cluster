@@ -60,5 +60,5 @@ DNSMasq notes:
 ## Bugs
 
 1. Nomad Docker services (nginxtest) using wrong IP address
-  - Docker network config used (see docker inspect), port mapping uses first host IP
-  - Service also available on containerOverlayIp:80 (!!)
+  - Reason: any Nomad port mapping uses first host IP
+  - Solution: set address_mode = "driver" & specify port number - applies to service (& check)
