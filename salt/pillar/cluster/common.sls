@@ -10,9 +10,6 @@ backend network cidr: 172.30.0.0/29
 # 172.31.3.1 (CIDR 172.31.3.0/24)
 fan overlay cidr: 172.31.0.0/16
 
-# Frontend (public) IP address
-#frontend IP address: {{ grains['ip_interfaces']['enp0s8'][0]}}
-
 # The symetric encryption key used for cosul's serf gossip protocol
 consul gossip encryption key: GHrF4UIY0j5y6CZqZE+X6g==
 

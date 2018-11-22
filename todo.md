@@ -13,34 +13,26 @@ DNSMasq notes:
   * Point general *dev (service) domain at frontend IP > Consul
   * 'this' local names (this, front.this, back.this)
 
-1. Networking part 1 ✔
-  - 'Private' frontend network (172.16.0.0) ✔
-  - 'Private' backend network (172.30.0.0) ✔
+1. Networking ✔
+  - Private frontend network (172.16.0.10x) ✔
+  - Private backend internal network (172.30.0.0) ✔
   - Fan networking ✔
-2. DNSMasq setup ✔
-3. Networking part 2 (...)
-  - Setup VB Internal network type (backend, 1 iface per node) ✔
-  - Setup VB Host only network type (frontend, 1 iface per node)
-    - Clean out any existing VB host networks
-    - `vb.customize ["modifyvm", :id, "--memory", "1024", "--cpus", "1", "--natnet1", "172.16.0/24"]`
-  - Confirm fan network still working
-  - Confirm host -> box access (Consul, Nomad, nginxtest service)
+2. DNSMasq ✔
 
 ## Tool installation
 
-1. Docker ✔
-2. Docker Compose ✔
-3. Nomad ✔
-4. Consul ✔
-5. System test ✔
-6. General system setup (...)
+1. Docker + Compose ✔
+2. Nomad ✔
+3. Consul ✔
+4. System test ✔
+5. General system setup (...)
   - Add vagrant user to docker group (sudo usermod -aG docker vagrant) ✔
   - Build local containers? (Rename for local use)
-7. Create Test Services (...)
+6. Create Test Services (...)
   - Nginx static page ✔
-8. Fabio
+7. Fabio
   - Setup container (talks to Consul DNS)
-9. Vault
+8. Vault
   - Setup as container or local binary?
   - Re-enable in nomad server config
 
