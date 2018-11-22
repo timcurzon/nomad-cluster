@@ -13,49 +13,31 @@ DNSMasq notes:
   * Point general *dev (service) domain at frontend IP > Consul
   * 'this' local names (this, front.this, back.this)
 
-1. Networking (part 1)
-  - Public frontend network ✘
+1. Networking part 1 ✔
   - 'Private' frontend network (172.16.0.0) ✔
   - 'Private' backend network (172.30.0.0) ✔
-  - Test inter node connectivity over private network ✔
-  - Fan networking setup ✔
-2. Networking (part 2)
-  - Setup VB Internal network type (backend, 1 iface per node)
+  - Fan networking ✔
+2. DNSMasq setup ✔
+3. Networking part 2 (...)
+  - Setup VB Internal network type (backend, 1 iface per node) ✔
   - Setup VB Host only network type (frontend, 1 iface per node)
+    - Clean out any existing VB host networks
+    - `vb.customize ["modifyvm", :id, "--memory", "1024", "--cpus", "1", "--natnet1", "172.16.0/24"]`
   - Confirm fan network still working
   - Confirm host -> box access (Consul, Nomad, nginxtest service)
-3. DNSMasq setup
-  - Basic config ✔
-  - Service domain ✔
-  - 'this' local names ✔
-  - Remove /etc/resolv.conf ✔
-  - Disable systemd-resolved ✔
-  - Stop systemd-resolved ✔
 
 ## Tool installation
 
 1. Docker ✔
 2. Docker Compose ✔
-3. Nomad
-  - Binary install ✔
-  - Config files ✔
-  - systemctl client service ✔
-  - systemctl server service ✔
-  - Environment variables ✔
-4. Consul
-  - Binary install ✔
-  - Config files ✔
-  - systemctl service ✔
-  - Healthchecks + scripts ✔
-  - Environment variables ✔
-  - Reload command fix ✔
-5. System test
-  - Consul ✔
-  - Nomad ✔
-6. General system setup
+3. Nomad ✔
+4. Consul ✔
+5. System test ✔
+6. General system setup (...)
   - Add vagrant user to docker group (sudo usermod -aG docker vagrant) ✔
-  - Build local containers? (At least rename for local use)
-7. Create Test Service (Nginx static page) ✔
+  - Build local containers? (Rename for local use)
+7. Create Test Services (...)
+  - Nginx static page ✔
 8. Fabio
   - Setup container (talks to Consul DNS)
 9. Vault

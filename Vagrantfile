@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
       node.vm.hostname = "node-#{i}" # Salt minion will use this for ID
 
       node.vm.network "private_network", ip: "172.16.0.#{i}" # Frontend network
-      node.vm.network "private_network", ip: "172.30.0.#{i}" # Backend network
+      node.vm.network "private_network", ip: "172.30.0.#{i}", virtualbox__intnet: true # Backend network
 
       node.vm.provision :salt do |salt|
         salt.masterless = true
