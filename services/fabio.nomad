@@ -1,35 +1,29 @@
-job "nginxtest" {
+job "fabio" {
   region = "global"
   datacenters = ["cluster-dev"]
-  type = "service"
+  type = "system"
 
   update {
     max_parallel = 1
+	  stagger = "30s"
     health_check = "checks"
     min_healthy_time = "60s"
     healthy_deadline = "5m"
+		auto_revert = true
   }
   
-  group "web" {
-    count = 3
-    
-    task "static" {
+  group "fabio" {
+
+    task "fabio" {
       driver = "docker"
       config {
-        image = "nginx:mainline-alpine"
-        volumes = [
-          "/services/assets/index.html:/usr/share/nginx/html/index.html"
-        ]
+        image = "fabiolb/fabio:latest"
       }
 
       service {
         address_mode = "driver"
-        name = "nginxtest"
+        name = "fabio"
         port = 80
-
-        tags = [
-          "urlprefix-nginxtest.service.cluster/"
-        ]
 
         check {
           address_mode = "driver"
@@ -47,8 +41,8 @@ job "nginxtest" {
       }
 
       resources {
-        cpu = 500
-        memory = 16
+        cpu = 1000
+        memory = 64
 
         network {
           mbits = 100

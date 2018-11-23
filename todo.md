@@ -26,7 +26,7 @@ DNSMasq notes:
 3. Consul ✔
 4. System test ✔
 5. General system setup (...)
-  - Add vagrant user to docker group (sudo usermod -aG docker vagrant) ✔
+  - Add vagrant user to docker group ✔
   - Build local containers? (Rename for local use)
 6. Create Test Services (...)
   - Nginx static page ✔
