@@ -18,34 +18,53 @@ job "fabio" {
       driver = "docker"
       config {
         image = "fabiolb/fabio:latest"
+				port_map {
+					http = 80
+					#https = 443
+					admin = 9998
+				}
       }
 
       service {
         address_mode = "driver"
         name = "fabio"
-        port = 80
+				tags = ["${attr.unique.hostname}", "urlprefix-fabio.service.cluster/"]
+				port = "admin"
 
         check {
           address_mode = "driver"
           type = "http"
-          path = "/"
+          path = "/health"
           interval = "30s"
           timeout = "10s"
-          port = 80
+				  port = "admin"
         }
       }
 
-      env {
-        "ENV_TESTVAL" = "nginx test env value 01"
-        "ENV_CHANGEME" = "trigger job change 001"
+			env {
+				FABIO_registry_consul_addr = "front.this.node.cluster:8500"
+				FABIO_registry_consul_register_enabled = "true"
+				# FABIO_proxy_cs = "cs=service.cluster;type=consul;cert=http://front.this.node.cluster:8500/v1/kv/fabio/cert"
+				# FABIO_proxy_addr = ":80, :443;cs=service.cluster"
+        FABIO_proxy_addr = ":80"
+        ENV_CHANGEME = "trigger job change 001"
       }
 
       resources {
         cpu = 1000
-        memory = 64
+        memory = 96
 
         network {
-          mbits = 100
+					mbits = 100
+					port "http" {
+						static = 80
+					}
+					#port "https" {
+					#	static = 443
+					#}
+					port "admin" {
+						static = 9998
+					}
         }
       }
     }
