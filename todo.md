@@ -15,6 +15,7 @@ DNSMasq notes:
 
 1. Networking ✔
   - Private frontend network (172.16.0.10x) ✔
+  - Review frontend network - need bridge (globally routable?)
   - Private backend internal network (172.30.0.0) ✔
   - Fan networking ✔
 2. DNSMasq ✔
@@ -31,9 +32,9 @@ DNSMasq notes:
 6. Create Test Services (...)
   - Nginx static page ✔
 7. Fabio
-  - Setup container (talks to Consul DNS)
+  - Setup job (talks to Consul DNS) ✔
 8. Vault
-  - Setup as container or local binary?
+  - Setup as job or local binary?
   - Re-enable in nomad server config
 
 ## Bugs
