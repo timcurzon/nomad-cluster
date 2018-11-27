@@ -15,7 +15,10 @@ DNSMasq notes:
 
 1. Networking ✔
   - Private frontend network (172.16.0.10x) ✔
-  - Review frontend network - need bridge (globally routable?)
+  - Review frontend network
+    - Bridge (globally routable?)
+    - Investigate VirtualBox natnetworks
+    - Really need private interfaces (on 172.) that can route externally (-> router)
   - Private backend internal network (172.30.0.0) ✔
   - Fan networking ✔
 2. DNSMasq ✔

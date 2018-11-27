@@ -19,6 +19,12 @@ Vagrant.configure("2") do |config|
 
       node.vm.hostname = "node-#{i}" # Salt minion will use this for ID
 
+      # Example public network with route config via shell provisioner
+      # node.vm.network "public_network", ip: "172.16.0.10#{i}"
+      # node.vm.provision "shell",
+      #   run: "always",
+      #   inline: "ip route del default; ip route add default via 172.16.0.101"
+
       node.vm.network "private_network", ip: "172.16.0.10#{i}" # Frontend network
       node.vm.network "private_network", ip: "172.30.0.#{i}", virtualbox__intnet: true # Backend network
 
