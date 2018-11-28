@@ -11,7 +11,7 @@ job "nginxtest" {
   }
   
   group "web" {
-    count = 3
+    count = 2
     
     task "static" {
       driver = "docker"
