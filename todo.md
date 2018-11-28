@@ -29,18 +29,16 @@ DNSMasq notes:
 5. General system setup (...)
   - Add vagrant user to docker group ✔
   - Build local containers? (Rename for local use)
-6. Create Test Services (...)
-  - Nginx static page ✔
-7. Fabio
-  - Setup job (talks to Consul DNS) ✔
-  - Tweak & test (..)
+6. Create initial test services ✔
+7. Fabio ✔
 8. Vault
   - Setup as job or local binary?
   - Re-enable in nomad server config
+  - Fabio config (add port 443)
 
-## Bugs
+## Issues
 
-1. Nomad services (nginxtest) using wrong IP address (..)
+1. Nomad services (nginxtest) using wrong IP address (...)
   - Detail: any Nomad port mapping uses first host IP
   - Threads:
     - https://github.com/hashicorp/nomad/issues/646
