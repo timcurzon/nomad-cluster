@@ -18,4 +18,5 @@ consul {
 
 client {
 	enabled = true
+	network_interface = "{{ pillar['nomad client network interface'] }}"
 }

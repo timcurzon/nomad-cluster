@@ -13,5 +13,11 @@ fan overlay cidr: 172.31.0.0/16
 # The symetric encryption key used for cosul's serf gossip protocol
 consul gossip encryption key: GHrF4UIY0j5y6CZqZE+X6g==
 
+# The interface the Nomad client will use for network fingerprinting. Scheduler
+# will then choose from interface IPs when allocating ports to tasks. This
+# inteface is the one created by the frontend network defined in the Vagrantfile
+# (IP 172.16.0.10x)
+nomad client network interface: enp0s8
+
 # The number of nodes currently configured to run in the cluster
 node count: 1
