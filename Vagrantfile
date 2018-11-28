@@ -23,9 +23,9 @@ Vagrant.configure("2") do |config|
       node.vm.network "private_network", ip: "172.30.0.#{i}", virtualbox__intnet: true # Backend network
 
       # Default route
-      node.vm.provision "shell",
-        run: "always",
-        inline: "ip route del default; ip route add default via 10.0.2.2 proto dhcp src 172.16.0.10#{i}"
+      #node.vm.provision "shell",
+      #  run: "always",
+      #  inline: "ip route del default; ip route add default via 10.0.2.2 proto dhcp src 172.16.0.10#{i}"
 
       node.vm.provision :salt do |salt|
         salt.masterless = true
