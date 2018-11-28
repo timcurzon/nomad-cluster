@@ -15,12 +15,9 @@ DNSMasq notes:
 
 1. Networking ✔
   - Private frontend network (172.16.0.10x) ✔
-  - Review frontend network
-    - Bridge (globally routable?)
-    - Investigate VirtualBox natnetworks
-    - Really need private interfaces (on 172.) that can route externally (-> router)
   - Private backend internal network (172.30.0.0) ✔
   - Fan networking ✔
+  - Review frontend network (use shell provisioner to tweak default route) ✔
 2. DNSMasq ✔
 
 ## Tool installation
@@ -36,12 +33,22 @@ DNSMasq notes:
   - Nginx static page ✔
 7. Fabio
   - Setup job (talks to Consul DNS) ✔
+  - Tweak & test (..)
 8. Vault
   - Setup as job or local binary?
   - Re-enable in nomad server config
 
 ## Bugs
 
-1. Nomad Docker services (nginxtest) using wrong IP address
-  - Reason: any Nomad port mapping uses first host IP
-  - Solution: set address_mode = "driver" & specify port number - applies to service (& check)
+1. Nomad services (nginxtest) using wrong IP address (..)
+  - Detail: any Nomad port mapping uses first host IP
+  - Threads:
+    - https://github.com/hashicorp/nomad/issues/646
+    - https://github.com/hashicorp/nomad/issues/2469
+  - Solution: update Nomad client config as follows:
+      ```
+      client {
+        enabled = true
+        network_interface = "[interface, e.g. enp0s3]"
+      }
+      ```
