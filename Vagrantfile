@@ -9,8 +9,8 @@ Vagrant.configure("2") do |config|
     vb.cpus = 1
   end
 
-  config.vm.synced_folder "salt/roots/", "/srv/salt"
-  config.vm.synced_folder "salt/pillar/", "/srv/pillar"
+  config.vm.synced_folder "saltstack/salt/", "/srv/salt"
+  config.vm.synced_folder "saltstack/pillar/", "/srv/pillar"
   config.vm.synced_folder "containers", "/containers"
   config.vm.synced_folder "services", "/services"
 
@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 
       node.vm.provision :salt do |salt|
         salt.masterless = true
-        salt.minion_config = "salt/minion"
+        salt.minion_config = "saltstack/minion"
         salt.run_highstate = true
       end
 
