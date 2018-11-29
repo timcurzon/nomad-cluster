@@ -32,9 +32,12 @@ DNSMasq notes:
 6. Create initial test services ✔
 7. Fabio ✔
 8. Vault
-  - Setup as job or local binary?
+  - Setup as job ✔
   - Re-enable in nomad server config
   - Fabio config (add port 443)
+9. Start jobs on node startup
+  - Vault
+  - Fabio
 
 ## Issues
 

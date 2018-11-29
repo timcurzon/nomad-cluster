@@ -42,8 +42,8 @@ job "nginxtest" {
       }
 
       env {
-        "ENV_TESTVAL" = "nginx test env value 01"
-        "ENV_CHANGEME" = "trigger job change 001"
+        ENV_TESTVAL = "nginx test env value 01"
+        ENV_CHANGEME = "trigger job change 001"
       }
 
       resources {
