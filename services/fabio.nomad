@@ -35,7 +35,7 @@ job "fabio" {
           address_mode = "driver"
           type = "http"
           path = "/health"
-          interval = "30s"
+          interval = "15s"
           timeout = "10s"
 				  port = "admin"
         }
@@ -51,7 +51,7 @@ job "fabio" {
       }
 
       resources {
-        cpu = 500
+        cpu = 250
         memory = 96
 
         network {

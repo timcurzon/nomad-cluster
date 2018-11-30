@@ -6,4 +6,4 @@ base:
     - consul
     - docker
     - nomad
-    - containers
+    - jobs

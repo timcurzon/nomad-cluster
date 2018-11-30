@@ -8,8 +8,8 @@ job "vault" {
     stagger = "2m"
     health_check = "checks"
     min_healthy_time = "30s"
-    healthy_deadline = "5m"
-		auto_revert = true
+    healthy_deadline = "9m"
+    auto_revert = true
   }
 
 	constraint {
@@ -42,14 +42,15 @@ job "vault" {
           address_mode = "driver"
           type = "http"
           path = "/v1/sys/health?standbyok"
-          interval = "30s"
+          interval = "15s"
           timeout = "10s"
 					port = 8200
         }
       }
 
       env {
-				VAULT_REDIRECT_ADDR = "http://${NOMAD_IP_vault}:${NOMAD_HOST_PORT_vault}"
+        VAULT_ADDR = "http://127.0.0.1:8200"
+        VAULT_REDIRECT_ADDR = "http://${NOMAD_IP_vault}:${NOMAD_HOST_PORT_vault}"
         ENV_CHANGEME = "trigger job change 001"
       }
 
@@ -73,12 +74,14 @@ job "vault" {
       }
 
       resources {
-        cpu = 500
+        cpu = 250
         memory = 100
 
         network {
           mbits = 10
-          port "vault" {}
+          port "vault" {
+            static = 8200
+          }
         }
       }
     }

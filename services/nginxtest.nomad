@@ -6,7 +6,7 @@ job "nginxtest" {
   update {
     max_parallel = 1
     health_check = "checks"
-    min_healthy_time = "60s"
+    min_healthy_time = "30s"
     healthy_deadline = "5m"
   }
   
@@ -35,8 +35,8 @@ job "nginxtest" {
           address_mode = "driver"
           type = "http"
           path = "/"
-          interval = "30s"
-          timeout = "10s"
+          interval = "10s"
+          timeout = "5s"
           port = 80
         }
       }
@@ -47,7 +47,7 @@ job "nginxtest" {
       }
 
       resources {
-        cpu = 500
+        cpu = 100
         memory = 16
 
         network {
