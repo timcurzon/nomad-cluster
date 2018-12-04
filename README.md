@@ -6,8 +6,6 @@ The Nomad dev cluster is a virtualised self-contained learning environment aimed
 
 Further information on Nomad can be found in the [official introductory](https://www.nomadproject.io/intro/index.html) documentation.
 
-* * *
-
 ## Getting started
 
 ### Requirements
@@ -60,8 +58,6 @@ Note that as we haven't set up any DNS for the cluster, all access is via direct
 
 [...TODO...]
 
-* * *
-
 ## Notes
 
 ### Networking
@@ -71,8 +67,6 @@ Note that as we haven't set up any DNS for the cluster, all access is via direct
 ### Saltstack
 
 [...TODO...]
-
-* * *
 
 ## Links
 
