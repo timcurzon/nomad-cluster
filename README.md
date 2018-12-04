@@ -32,27 +32,35 @@ cd [repoDir]
 vagrant up
 ```
 
-At this point, 3 virtualbox machines will be created. Each is configured in an identical manner, representing a single node in the cluster. 
+At this point, 3 almost identical virtualbox machines will be created, each representing a single node in the cluster.
 
 ### Machine access
 
 Each machine is named _node-[number]_ (where _[number]_ is 1-3), and can be accessed via:
 
 - __SSH__ simply `vagrant ssh node-{1-3}`
-- __IP Address__ `192.168.1.10{1-3}` (private, scoped to the local machine)
+- __IP Address__ `172.16.0.10{1-3}` (private, accessible only to the host machine)
 
-The following services are initially available:
+The following service UIs are initially available:
 
-- Nomad: `192.168.1.10{1-3}:4646`
-- Consul: `192.168.1.10{1-3}:8500`
-- Vault: `192.168.1.10{1-3}:8600`
-- Fabio (proxy / edge router): `192.168.1.10{1-3}:80`
+- Nomad: `http://172.16.0.10{1-3}:4646`
+- Consul: `http://172.16.0.10{1-3}:8500`
+- Vault: `http://172.16.0.10{1-3}:8600`
+- Fabio (proxy / edge router): `http://172.16.0.10{1-3}:9998`
 
 Note that as we haven't set up any DNS for the cluster, all access is via direct IP address. DNS will be covered later.
 
 ### Setting up Vault
 
-[...TODO...]
+This step is optional, but is critical if you want to play around with setting up SSL/TLS secured services.
+
+1) Once the cluster is up, access the Vault UI at `http://172.16.0.101:8200`, enter 1 for both the "Key Shares" and "Key Threshold" values (note these values are not acceptable in production environment) & click "Initialize"
+
+2) Note down the Initial root token & Key 1 values & click "Continue to Unseal" - unseal Vault using the Key 1 value & log in using the initial root token [LOGIN TECHNICALLY NOT REQUIRED]
+
+3) Now you have the root token, update the Vagrantfile (in the project root) - replace the placeholder string "[[insert root token value here]]" with the root token value
+
+4) [...TODO something about reprovisioning / rebooting...]
 
 ### Local DNS
 

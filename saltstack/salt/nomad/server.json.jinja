@@ -26,9 +26,9 @@ server {
 	encrypt = "8sfUDokS8ehEsfbj9ysdaf=="
 }
 
-# TODO: re-enable
-#vault {
-#	enabled = true
-#	address = "http://active.vault.service.cluster:8200"
-#	token = "5681c566-f814-eedb-d3a4-3c59c21e52a8"
-#}
+# NOTE: token to be updated after each cluster build
+vault {
+	enabled = true
+	address = "http://active.vault.service.cluster:8200"
+	token = "{{ pillar['vault token'] }}"
+}

@@ -31,18 +31,19 @@ DNSMasq notes:
   - Build local containers? (Rename for local use)
 6. Create initial test services ✔
 7. Fabio ✔
-8. Vault
+8. Vault (...)
   - Setup as job ✔
-  - Manual init via web UI ?
-  - Re-enable in nomad server config (generate vault token first)
+  - Manual init (via web UI)
+    - Document in README
+    - Re-enable in nomad server config - generate vault token first
   - Fabio config (add port 443)
 9. Start jobs on node startup
   - Fabio ✔
-  - Vault
+  - Vault ✔
 
 ## Issues
 
-1. Nomad services (nginxtest) using wrong IP address (...)
+1. Nomad services (nginxtest) using wrong IP address ✔
   - Detail: any Nomad port mapping uses first host IP
   - Threads:
     - https://github.com/hashicorp/nomad/issues/646

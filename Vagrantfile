@@ -30,6 +30,9 @@ Vagrant.configure("2") do |config|
       node.vm.provision :salt do |salt|
         salt.masterless = true
         salt.minion_config = "saltstack/minion"
+        salt.pillar({
+          "vault token" => "11AO94US21ovklV57eXmTX0L"
+        })
         salt.run_highstate = true
       end
 

@@ -6,4 +6,6 @@ base:
     - consul
     - docker
     - nomad
+
+  'node-1*':
     - jobs

@@ -18,7 +18,7 @@ job "vault" {
 	}
 
   group "vault" {
-    count = 3
+    count = 1
     
     task "vault" {
       driver = "docker"
