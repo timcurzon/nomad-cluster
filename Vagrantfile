@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
         salt.masterless = true
         salt.minion_config = "saltstack/minion"
         salt.pillar({
-          "vault token" => "11AO94US21ovklV57eXmTX0L"
+          "vault token" => "[[insert root token value here]]"
         })
         salt.run_highstate = true
       end
