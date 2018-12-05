@@ -17,7 +17,6 @@ DNSMasq notes:
   - Private frontend network (172.16.0.10x) ✔
   - Private backend internal network (172.30.0.0) ✔
   - Fan networking ✔
-  - Review frontend network (use shell provisioner to tweak default route) ✔
 2. DNSMasq ✔
 
 ## Tool installation
@@ -33,13 +32,15 @@ DNSMasq notes:
 7. Fabio ✔
 8. Vault (...)
   - Setup as job ✔
-  - Manual init (via web UI)
-    - Document in README
-    - Re-enable in nomad server config - generate vault token first
+  - Manual init (via README) ✔
   - Fabio config (add port 443)
 9. Start jobs on node startup
   - Fabio ✔
   - Vault ✔
+
+## Setup / README
+
+- Specify 'vault token' in external file somewhere (don't modify Vagrantfile)
 
 ## Issues
 
@@ -55,3 +56,8 @@ DNSMasq notes:
         network_interface = "[interface, e.g. enp0s3]"
       }
       ```
+2. Vault setup
+  - Options:
+    - Do manually (see README)
+    - Run in dev mode (networking issues, will it cluster?)
+  - Solution: configure manually & document in README
