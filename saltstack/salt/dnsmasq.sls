@@ -11,7 +11,7 @@ dnsmasq config basic:
     - makedirs: True
     - contents:
       - no-hosts     # Don't read /etc/hosts
-      - no-resolv    # Don't repeatedly read /etc/resolv.conf
+      - no-resolv    # Don't read /etc/resolv.conf
       - cache-size=0 # Number of domains to cache
 
 dnsmasq config consul:
@@ -31,7 +31,7 @@ dnsmasq upstream config:
    - mode: 644
    - makedirs: True
    - contents:
-     - server=8.8.8.8
+     - server=1.1.1.1
 
 dnsmasq config this:
   file.managed:
