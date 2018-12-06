@@ -1,6 +1,7 @@
 base:
   '*':
     - test
+    - common
     - networking
     - dnsmasq
     - consul

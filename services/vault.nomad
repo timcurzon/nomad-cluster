@@ -1,6 +1,6 @@
 job "vault" {
   region = "global"
-  datacenters = ["cluster-dev"]
+  datacenters = ["local-cluster"]
   type = "service"
 
   update {
@@ -57,9 +57,9 @@ job "vault" {
       template {
         data = <<EOT
           backend "consul" {
-            address = "front.this.node.cluster:8500"
+            address = "front.this.node.{{ env "meta.cluster-domain" }}:8500"
             path = "/vault"
-            service_tags = "urlprefix-vault.service.cluster/"
+            service_tags = "urlprefix-vault.service.{{ env "meta.cluster-domain" }}/"
           }
           listener "tcp" {
             address = "0.0.0.0:8200"

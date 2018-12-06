@@ -37,10 +37,15 @@ DNSMasq notes:
 9. Start jobs on node startup
   - Fabio ✔
   - Vault ✔
+10. Customisable cluster domain (default: devcluster) ✔
 
-## Setup / README
+## Setup / Customisation
 
-- Specify 'vault token' in external file somewhere (don't modify Vagrantfile)
+- Specify Vagrantfile pillar values in external file somewhere (don't modify Vagrantfile)
+  - 'cluster domain'
+  - 'vault token'
+
+* * *
 
 ## Issues
 
@@ -56,7 +61,7 @@ DNSMasq notes:
         network_interface = "[interface, e.g. enp0s3]"
       }
       ```
-2. Vault setup
+2. Vault setup ✔
   - Options:
     - Do manually (see README)
     - Run in dev mode (networking issues, will it cluster?)

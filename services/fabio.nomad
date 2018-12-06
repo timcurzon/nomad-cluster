@@ -1,6 +1,6 @@
 job "fabio" {
   region = "global"
-  datacenters = ["cluster-dev"]
+  datacenters = ["local-cluster"]
   type = "system"
 
   update {
@@ -28,7 +28,7 @@ job "fabio" {
       service {
         address_mode = "driver"
         name = "fabio"
-				tags = ["${attr.unique.hostname}", "urlprefix-fabio.service.cluster/"]
+				tags = ["${attr.unique.hostname}", "urlprefix-fabio.service.${meta.cluster-domain}/"]
 				port = "admin"
 
         check {
@@ -42,10 +42,10 @@ job "fabio" {
       }
 
 			env {
-				FABIO_registry_consul_addr = "front.this.node.cluster:8500"
+				FABIO_registry_consul_addr = "front.this.node.${meta.cluster-domain}:8500"
 				FABIO_registry_consul_register_enabled = "true"
-				# FABIO_proxy_cs = "cs=service.cluster;type=consul;cert=http://front.this.node.cluster:8500/v1/kv/fabio/cert"
-				# FABIO_proxy_addr = ":80, :443;cs=service.cluster"
+				# FABIO_proxy_cs = "cs=service.${meta.cluster-domain};type=consul;cert=http://front.this.node.${meta.cluster-domain}:8500/v1/kv/fabio/cert"
+				# FABIO_proxy_addr = ":80, :443;cs=service.${meta.cluster-domain}"
         FABIO_proxy_addr = ":80"
         ENV_CHANGEME = "trigger job change 001"
       }

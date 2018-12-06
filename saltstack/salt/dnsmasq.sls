@@ -21,7 +21,7 @@ dnsmasq config consul:
     - group: root
     - mode: 644
     - makedirs: True
-    - contents: server=/cluster/{{ pillar['frontend IP address'] }}#8600
+    - contents: server=/{{ pillar['cluster domain'] }}/{{ pillar['frontend IP address'] }}#8600
 
 dnsmasq upstream config:
  file.managed:
@@ -41,9 +41,9 @@ dnsmasq config this:
     - mode: 644
     - makedirs: True
     - contents:
-      - address=/this.node.cluster/{{ pillar['frontend IP address'] }}
-      - address=/front.this.node.cluster/{{ pillar['frontend IP address'] }}
-      - address=/back.this.node.cluster/{{ (pillar['backend network cidr']|replace('.0/', '.' ~ pillar['cluster index'] ~ '/')).split('/')[0] }}
+      - address=/this.node.{{ pillar['cluster domain'] }}/{{ pillar['frontend IP address'] }}
+      - address=/front.this.node.{{ pillar['cluster domain'] }}/{{ pillar['frontend IP address'] }}
+      - address=/back.this.node.{{ pillar['cluster domain'] }}/{{ (pillar['backend network cidr']|replace('.0/', '.' ~ pillar['cluster index'] ~ '/')).split('/')[0] }}
 
 dnsmasq service:
   service.running:

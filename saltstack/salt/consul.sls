@@ -20,7 +20,7 @@ consul after install:
 consul environment variables:
  file.append:
     - name: /etc/environment
-    - text: CONSUL_HTTP_ADDR=front.this.node.cluster:8500
+    - text: CONSUL_HTTP_ADDR=front.this.node.{{ pillar['cluster domain'] }}:8500
     - require:
       - archive: consul install
 

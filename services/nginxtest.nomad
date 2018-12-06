@@ -1,6 +1,6 @@
 job "nginxtest" {
   region = "global"
-  datacenters = ["cluster-dev"]
+  datacenters = ["local-cluster"]
   type = "service"
 
   update {
@@ -28,7 +28,7 @@ job "nginxtest" {
         port = 80
 
         tags = [
-          "urlprefix-nginxtest.service.cluster/"
+          "urlprefix-nginxtest.service.${meta.cluster-domain}/"
         ]
 
         check {

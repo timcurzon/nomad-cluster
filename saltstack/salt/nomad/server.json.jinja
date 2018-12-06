@@ -1,6 +1,6 @@
 {%- set backendIP = (pillar['backend network cidr']|replace(".0/", '.' ~ pillar['cluster index'] ~ '/')).split('/')[0] %}
 
-datacenter = "cluster-dev"
+datacenter = "local-cluster"
 data_dir = "/var/nomad/"
 leave_on_interrupt = true
 enable_debug = false
@@ -29,6 +29,6 @@ server {
 # NOTE: token to be updated after each cluster build
 vault {
 	enabled = true
-	address = "http://active.vault.service.cluster:8200"
+	address = "http://active.vault.service.{{ pillar['cluster domain'] }}:8200"
 	token = "{{ pillar['vault token'] }}"
 }

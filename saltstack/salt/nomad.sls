@@ -22,7 +22,7 @@ nomad after install:
 nomad environment variables:
  file.append:
     - name: /etc/environment
-    - text: NOMAD_ADDR=http://front.this.node.cluster:4646
+    - text: NOMAD_ADDR=http://front.this.node.{{ pillar['cluster domain'] }}:4646
     - require:
       - archive: nomad install
 
