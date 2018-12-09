@@ -73,7 +73,18 @@ Now you have a fully initialised cluster you may want to take a snapshot of each
 
 ### Local DNS
 
-[...TODO...]
+To resolve services residing on the cluster, some form of DNS will have to be setup. The simplest approach (at least on Linux) is to use DNSMasq. It is [simple to setup (Ubuntu 18.04)](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04). The following config should work well enough:
+
+```
+port=53
+interface=lo
+listen-address=127.0.0.1
+bind-interfaces
+server=[your upstream DNS server]
+address=/devcluster/172.16.0.101
+```
+
+Remember to update the address setting if you change the cluster domain.
 
 ## Notes
 
@@ -94,3 +105,7 @@ Now you have a fully initialised cluster you may want to take a snapshot of each
 - [Vagrant](https://www.vagrantup.com/) ([docs](https://www.vagrantup.com/docs/))
 - [Vault](https://www.vaultproject.io/) ([docs](https://www.vaultproject.io/docs/install/))
 - [Virtualbox](https://www.virtualbox.org/) ([docs](https://www.virtualbox.org/manual/UserManual.html))
+
+### Local DNS
+
+- [DNSMasq setup in Ubuntu 18.04](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04)

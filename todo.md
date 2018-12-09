@@ -5,7 +5,7 @@
 1. Create salt pillar for each node ✔
 2. Test pillar data can be selected on masterless minion based on node name ✔
 
-## System setup
+## Node system setup
 
 DNSMasq notes:
   * Basic DNS config (no-hosts, cache-size 0, no-resolv)
@@ -26,17 +26,12 @@ DNSMasq notes:
 3. Consul ✔
 4. System test ✔
 5. General system setup (...)
-  - Add vagrant user to docker group ✔
   - Build local containers? (Rename for local use)
 6. Create initial test services ✔
 7. Fabio ✔
 8. Vault (...)
-  - Setup as job ✔
-  - Manual init (via README) ✔
   - Fabio config (add port 443)
 9. Start jobs on node startup
-  - Fabio ✔
-  - Vault ✔
 10. Customisable cluster domain (default: devcluster) ✔
 
 ## Setup / Customisation
