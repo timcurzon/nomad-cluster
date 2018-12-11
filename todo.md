@@ -1,44 +1,27 @@
 # TodoList
 
-## Salt
+## Final tasks
 
-1. Create salt pillar for each node ✔
-2. Test pillar data can be selected on masterless minion based on node name ✔
+- Finish docs
+  - SaltStack section
+  - Customisation section (cluster domain etc)
+  - SSL service setup
+- Test 2+ nodes (Vault config?)
+- Vault Fabio config (add port 443)
+- Specify Vagrantfile pillar values in external file somewhere (don't modify Vagrantfile)
+  - 'cluster domain'
+  - 'vault token'
+- Build local containers? (Rename for local use)
 
-## Node system setup
+* * *
 
-DNSMasq notes:
+## Notes
+
+DNSMasq:
   * Basic DNS config (no-hosts, cache-size 0, no-resolv)
   * Upstream DNS (not really required)
   * Point general *dev (service) domain at frontend IP > Consul
   * 'this' local names (this, front.this, back.this)
-
-1. Networking ✔
-  - Private frontend network (172.16.0.10x) ✔
-  - Private backend internal network (172.30.0.0) ✔
-  - Fan networking ✔
-2. DNSMasq ✔
-
-## Tool installation
-
-1. Docker + Compose ✔
-2. Nomad ✔
-3. Consul ✔
-4. System test ✔
-5. General system setup (...)
-  - Build local containers? (Rename for local use)
-6. Create initial test services ✔
-7. Fabio ✔
-8. Vault (...)
-  - Fabio config (add port 443)
-9. Start jobs on node startup
-10. Customisable cluster domain (default: devcluster) ✔
-
-## Setup / Customisation
-
-- Specify Vagrantfile pillar values in external file somewhere (don't modify Vagrantfile)
-  - 'cluster domain'
-  - 'vault token'
 
 * * *
 

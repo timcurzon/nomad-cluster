@@ -86,20 +86,40 @@ address=/devcluster/172.16.0.101
 
 Remember to update the address setting if you change the cluster domain.
 
+## Customisation
+
+[...TODO...]
+
 ## Notes
 
 ### Networking
 
-[...TODO...]
+Networking is setup to approximately resemble a production environment, where a cluster node has 2 adapters - one public, and one private dedicated to inter-cluster communication.
+
+Due to the virtualised environment requirements, networking implementation is slightly more involved. Each node has 3 network interfaces, with 1 is available outside the VM.
+
+*Note that __{1-3}__ represents the cluster node number*
+
+- __10.0.2.*x*__ Auto-provisioned by Vagrant, used for outbound network access via NAT
+- __172.16.0.10{1-3}__ External & internal interface, used for accessing cluster services
+- __172.16.30.{1-3}__ Internal node to node interface (dedicated to Nomad server & cluster service traffic - fan network bridge routes over this interface)
+
+There are also two bridges:
+
+- __172.31.{1-3}.*n*__ Fan networking - Docker assign on this range to containers. *n* is the per service IP (up to 254 services per cluster node)
+- __172.17.0.1__ Default docker0 bridge (unused)
+
+Service to service (container to container) addressing as achieved through fan networking - see [Fan Networking on Ubuntu](https://wiki.ubuntu.com/FanNetworking) for technical details. In summary though, it allows up to 254 uniquely addressable services per node, each routeable from any node in the cluster.
 
 ### Saltstack
 
 [...TODO...]
 
-## Links
+## Links & References
 
 - [Consul](https://www.consul.io/) ([docs](https://www.consul.io/docs/))
 - [Fabio](https://fabiolb.net/)
+- [Fan Networking (Ubuntu)](https://wiki.ubuntu.com/FanNetworking)
 - [Nomad](https://www.nomadproject.io/) ([docs](https://www.nomadproject.io/docs/))
 - [SaltStack](https://www.saltstack.com/) ([docs](https://docs.saltstack.com/en/latest/))
 - [Vagrant](https://www.vagrantup.com/) ([docs](https://www.vagrantup.com/docs/))
