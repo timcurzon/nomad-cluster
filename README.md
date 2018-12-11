@@ -89,6 +89,7 @@ Remember to update the address setting if you change the cluster domain.
 ## Customisation
 
 [...TODO...]
+[ sort out Vagrantfile pillar values first]
 
 ## Notes
 
@@ -111,9 +112,17 @@ There are also two bridges:
 
 Service to service (container to container) addressing as achieved through fan networking - see [Fan Networking on Ubuntu](https://wiki.ubuntu.com/FanNetworking) for technical details. In summary though, it allows up to 254 uniquely addressable services per node, each routeable from any node in the cluster.
 
-### Saltstack
+### SaltStack
 
-[...TODO...]
+SaltStack is a configuration management tool, a bit like Puppet or Ansible. It is triggered by Vagrant upon provisioning to configure each node (it has a built in SaltStack provisioner). To perform any degree of node customisation, the state & pillar files (configuration actions & key value data respectively) are where you'll likely begin.
+
+SaltStack file overview:
+- `saltstack/pillar` - configuration data
+- `saltstack/salt` - configuration actions (services with a more complicated setup may have a directory of support files)
+
+To give a very brief overview of operations - SaltStack starts with processing the `top.sls` state file which in turn references other state files that are run on the specified nodes, e.g. '*' means run on all nodes (note the node name is specified by Vagrant - see node.vm.hostname definition). State files are specified per service / common actions.
+
+Please refer to the [docs](https://docs.saltstack.com/en/latest/) for further information.
 
 ## Links & References
 
