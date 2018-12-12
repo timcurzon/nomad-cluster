@@ -1,11 +1,11 @@
 base:
   '*':
     - common
-
-  'node*':
-    - cluster.common
+    {% if salt['file.file_exists']('/srv/pillar/overrides.sls') %}
+    - overrides
+    {% endif %}
 
 {% for nodeNum in range(1, 4) %}
   node-{{ nodeNum }}:
-    - cluster.node-{{ nodeNum }}
+    - node-{{ nodeNum }}
 {% endfor %}

@@ -2,12 +2,10 @@
 
 ## Final tasks
 
-- Specify Vagrantfile pillar values in external file somewhere (don't modify Vagrantfile)
-  - 'cluster domain'
-  - 'vault token'
-- Finish docs
+- Move Vagrantfile pillar values to external file ✔
+- Finish documentation (..)
   - SaltStack section ✔
-  - Customisation section (cluster domain etc)
+  - Customisation section (cluster domain etc) ✔
   - SSL service setup
 - Test 2+ nodes (Vault config?)
 - Vault Fabio config (add port 443)
