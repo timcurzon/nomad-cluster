@@ -57,10 +57,13 @@ This step is optional, but is critical if you want to play around with setting u
 1) Once the cluster is up, access the Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Note down the "Initial root token" & "Key 1" values
 
 2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value & trigger a Vagrant re-provision with
+
     ```
     vagrant provision
     ```
+
     Once re-provisioning is complete, restart the cluster with
+
     ```
     vagrant reload
     ```
