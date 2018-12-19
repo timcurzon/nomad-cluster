@@ -3,16 +3,16 @@ job "fabio" {
   datacenters = ["local-cluster"]
   type = "system"
 
-  update {
-    max_parallel = 1
-	  stagger = "30s"
-    health_check = "checks"
-    min_healthy_time = "60s"
-    healthy_deadline = "5m"
-		auto_revert = true
-  }
-  
   group "fabio" {
+
+    update {
+      max_parallel = 1
+      stagger = "20s"
+      health_check = "checks"
+      min_healthy_time = "20s"
+      healthy_deadline = "2m"
+      auto_revert = true
+    }
 
     task "fabio" {
       driver = "docker"
@@ -35,19 +35,19 @@ job "fabio" {
           address_mode = "driver"
           type = "http"
           path = "/health"
-          interval = "15s"
-          timeout = "10s"
+          interval = "10s"
+          timeout = "2s"
 				  port = "admin"
         }
       }
 
 			env {
 				FABIO_registry_consul_addr = "front.this.node.${meta.cluster-domain}:8500"
-				FABIO_registry_consul_register_enabled = "true"
+				FABIO_registry_consul_register_enabled = "false"
 				# FABIO_proxy_cs = "cs=service.${meta.cluster-domain};type=consul;cert=http://front.this.node.${meta.cluster-domain}:8500/v1/kv/fabio/cert"
 				# FABIO_proxy_addr = ":80, :443;cs=service.${meta.cluster-domain}"
         FABIO_proxy_addr = ":80"
-        ENV_CHANGEME = "trigger job change 001"
+        ENV_CHANGEME = "trigger job change 003"
       }
 
       resources {

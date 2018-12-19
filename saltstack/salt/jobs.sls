@@ -14,21 +14,21 @@ jobs initial wait:
 jobs run fabio:
   cmd.run:
     - cwd: /services
-    - name: nomad run fabio.nomad && touch /tmp/fabio-firstrun
+    - name: nomad run fabio.nomad && touch /services/fabio-firstrun
     - env:
       - NOMAD_ADDR: http://front.this.node.{{ pillar['cluster domain'] }}:4646
     - unless:
-      - ls /tmp/fabio-firstrun
+      - ls /services/fabio-firstrun
     - require:
       - cmd: jobs initial wait
 
 jobs run vault:
   cmd.run:
     - cwd: /services
-    - name: nomad run vault.nomad && touch /tmp/vault-firstrun
+    - name: nomad run vault.nomad && touch /services/vault-firstrun
     - env:
       - NOMAD_ADDR: http://front.this.node.{{ pillar['cluster domain'] }}:4646
     - unless:
-      - ls /tmp/vault-firstrun
+      - ls /services/vault-firstrun
     - require:
       - cmd: jobs initial wait

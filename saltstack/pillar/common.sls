@@ -4,7 +4,7 @@ backend network cidr: 172.30.0.0/29
 
 # The class B network ubuntu-fan uses to create the overlay network for docker
 # containers. The class D value from the backend network are mapped up to class
-# C values and the server is allocated a class D value of 1.
+# C values and the server is allocated a class D value of 1
 #
 # Taking the example from above, the server's overlay fan network ip will be
 # 172.31.3.1 (CIDR 172.31.3.0/24)
@@ -19,8 +19,9 @@ consul gossip encryption key: GHrF4UIY0j5y6CZqZE+X6g==
 # (IP 172.16.0.10x)
 nomad client network interface: enp0s8
 
-# The number of nodes currently configured to run in the cluster
-node count: 1
+# The number of nodes currently configured to run in the cluster. Used in Consul
+# and Nomad server configs - this is how many nodes are expected in the cluster
+node count: 3
 
 # Default cluster domain, e.g using the default, services will be exposed by
 # Consul / Fabio as "[service-name].service.devcluster"

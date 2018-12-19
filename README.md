@@ -68,7 +68,13 @@ This step is optional, but is critical if you want to play around with setting u
     vagrant reload
     ```
 
-3) Finally, you need to unseal Vault - this is required every time the service is started up. Head back to the Vault UI at http://172.16.0.101:8200 and enter the Key 1 value. You can log in with the initial root token at this point if required.
+3) Finally, you need to unseal Vault - this is required (for each node) every time the service is started up. Head back to the Vault UI on each node at:
+
+- http://172.16.0.101:8200
+- http://172.16.0.102:8200
+- http://172.16.0.103:8200
+
+...enter the Key 1 value. You can log in with the initial root token at this point if required.
 
 ### Initial cluster snapshot
 

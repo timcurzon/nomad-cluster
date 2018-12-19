@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "containers", "/containers"
   config.vm.synced_folder "services", "/services"
 
-  (1..1).each do |i|
+  (1..3).each do |i|
     config.vm.define "node-#{i}" do |node|
 
       node.vm.hostname = "node-#{i}" # Salt minion will use this for ID

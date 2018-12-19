@@ -3,15 +3,6 @@ job "vault" {
   datacenters = ["local-cluster"]
   type = "service"
 
-  update {
-    max_parallel = 1
-    stagger = "2m"
-    health_check = "checks"
-    min_healthy_time = "30s"
-    healthy_deadline = "9m"
-    auto_revert = true
-  }
-
 	constraint {
 		operator = "distinct_hosts"
 		value = "true"
@@ -19,7 +10,16 @@ job "vault" {
 
   group "vault" {
     count = 1
-    
+
+    update {
+      max_parallel = 1
+      stagger = "2m"
+      health_check = "checks"
+      min_healthy_time = "30s"
+      healthy_deadline = "9m"
+      auto_revert = true
+    }
+
     task "vault" {
       driver = "docker"
       config {

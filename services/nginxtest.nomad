@@ -3,16 +3,16 @@ job "nginxtest" {
   datacenters = ["local-cluster"]
   type = "service"
 
-  update {
-    max_parallel = 1
-    health_check = "checks"
-    min_healthy_time = "30s"
-    healthy_deadline = "5m"
-  }
-  
   group "web" {
     count = 2
-    
+
+    update {
+      max_parallel = 1
+      health_check = "checks"
+      min_healthy_time = "30s"
+      healthy_deadline = "5m"
+    }
+
     task "static" {
       driver = "docker"
       config {
