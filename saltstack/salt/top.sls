@@ -8,5 +8,5 @@ base:
     - docker
     - nomad
 
-  'node-1*':
-    - jobs
+#  'node-1*':
+#    - jobs

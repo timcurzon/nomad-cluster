@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 1024
     vb.cpus = 1
+    vb.linked_clone = true
   end
 
   config.vm.synced_folder "saltstack/salt/", "/srv/salt"

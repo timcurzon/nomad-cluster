@@ -7,7 +7,7 @@
   - SaltStack section ✔
   - Customisation section (cluster domain etc) ✔
   - SSL service setup
-- Test 2+ nodes (Vault config?)
+- Test 2+ nodes (Vault config?) ✔
 - Vault Fabio config (add port 443)
 - Build local containers? (Rename for local use)
 

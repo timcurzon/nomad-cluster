@@ -45,18 +45,43 @@ The following service UIs are initially available:
 
 - Nomad: `http://172.16.0.10{1-3}:4646`
 - Consul: `http://172.16.0.10{1-3}:8500`
-- Vault: `http://172.16.0.10{1-3}:8600`
-- Fabio (proxy / edge router): `http://172.16.0.10{1-3}:9998`
 
 Note that as we haven't set up any DNS for the cluster, all access is direct via IP address. DNS will be covered later.
 
-### Setting up Vault
+### Basic services
+
+- Vault: `http://172.16.0.10{1-3}:8600`
+
+Now you have a running cluster, it's time to start up some services.
+
+Firstly, __Fabio__. SSH into node-1, then...
+
+```
+nomad run /services/fabio.nomad
+```
+
+Check out the Fabio job status in the Nomad UI, then check the Fabio UI:
+
+- Nomad job UI: `http://172.16.0.101:4646/ui/jobs/fabio`
+- Fabio UI: `http://172.16.0.101:9998`
+
+### Starting up Vault
 
 This step is optional, but is critical if you want to play around with setting up SSL/TLS services.
 
-1) Once the cluster is up, access the Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Note down the "Initial root token" & "Key 1" values
+To start up __Vault__, SSH into node-1, then...
 
-2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value & trigger a Vagrant re-provision with
+```
+nomad run /services/vault.nomad
+```
+
+Check the Vault job allocation status in the Nomad UI.
+
+- Nomad job UI: `http://172.16.0.101:4646/ui/jobs/vault`
+
+1) Once the job is running (all allocations successful), access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Copy / note down the "Initial root token" & "Key 1" values
+
+2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant re-provision (this allows Nomad to use Vault)...
 
     ```
     vagrant provision
@@ -68,13 +93,13 @@ This step is optional, but is critical if you want to play around with setting u
     vagrant reload
     ```
 
-3) Finally, you need to unseal Vault - this is required (for each node) every time the service is started up. Head back to the Vault UI on each node at:
+3) Finally, you need to unseal the Vault instance on each node. This is required every time the service is started up. Head back to the Vault UI on each node at:
 
 - http://172.16.0.101:8200
 - http://172.16.0.102:8200
 - http://172.16.0.103:8200
 
-...enter the Key 1 value. You can log in with the initial root token at this point if required.
+...enter the Key 1 value. Log in with the initial root token on any single node to access the full Vault UI.
 
 ### Initial cluster snapshot
 

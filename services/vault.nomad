@@ -9,7 +9,7 @@ job "vault" {
 	}
 
   group "vault" {
-    count = 1
+    count = 3
 
     update {
       max_parallel = 1
