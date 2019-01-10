@@ -75,11 +75,9 @@ To start up __Vault__, SSH into node-1, then...
 nomad run /services/vault.nomad
 ```
 
-Check the Vault job allocation status in the Nomad UI.
+Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646/ui/jobs/vault`. Once the job is running (all allocations successful)...
 
-- Nomad job UI: `http://172.16.0.101:4646/ui/jobs/vault`
-
-1) Once the job is running (all allocations successful), access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Copy / note down the "Initial root token" & "Key 1" values
+1) Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Copy / note down the "Initial root token" & "Key 1" values
 
 2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant re-provision (this allows Nomad to use Vault)...
 
