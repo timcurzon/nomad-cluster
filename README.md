@@ -77,7 +77,7 @@ nomad run /services/vault.nomad
 
 Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646/ui/jobs/vault`. Once the job is running (all allocations successful)...
 
-1) Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Copy / note down the "Initial root token" & "Key 1" values
+1) Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Download / note down the "Initial root token" & "Key 1" values
 
 2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant re-provision (this allows Nomad to use Vault)...
 
@@ -97,7 +97,7 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
 - http://172.16.0.102:8200
 - http://172.16.0.103:8200
 
-...enter the Key 1 value. Log in with the initial root token on any single node to access the full Vault UI.
+...enter the Key 1 (base64) value. Log in with the initial root token on node 1 (http://172.16.0.101:8200) to access the full Vault UI.
 
 ### Initial cluster snapshot
 
@@ -117,6 +117,51 @@ address=/devcluster/172.16.0.101
 ```
 
 Remember to update the address setting if you change the cluster domain.
+
+## Setting up an HTTPS service with Vault & Fabio
+
+### Pre-requisites
+
+[[TODO: Start up example unsecured service]]
+
+[[TODO: Install Vault binary or use version on the nodes]]
+
+### Useful Vault CLI commands
+
+Firstly, setup a Vault address environment variable - `export VAULT_ADDR=http://172.16.0.101:8200`. Add this to your preferred shell enviroment configuration at your leisure.
+
+- Authenticate/login to vault (using root token): `vault login` (enter root token at prompt)
+- List authentication methods: `vault auth list`
+
+### Setting up a Vault user
+
+Log into the Vault UI (http://172.16.0.101:8200) with the root token...
+
+1) Enable the username/password authentication method: __Access__ -> __Auth Methods__ -> Enable new method -> Username & Password (accept the defaults)
+
+2) Create a new entity: __Access__ -> __Entities__ -> Create entity (again accept the defaults)
+
+3) Create a new alias for this entity: __Access__ -> __Entities__ -> Entity "..." Menu -> Create alias (supply name & select token/ auth backend)
+
+[[Set user password]]
+
+[[Re-authenticate with Vault as user]]
+
+### Create a root certificate
+
+[[TODO]]
+
+### Create a service certificate
+
+[[TODO]]
+
+### Setup service with certificate
+
+[[TODO: Add to Consul]]
+
+[[TODO: explain that Fabio will use cert]]
+
+[[TODO: Verify service]]
 
 ## Customisation
 
