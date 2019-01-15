@@ -79,16 +79,10 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
 
 1) Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Download / note down the "Initial root token" & "Key 1" values
 
-2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant re-provision (this allows Nomad to use Vault)...
+2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant reload with provision (this allows Nomad to use Vault)...
 
     ```
-    vagrant provision
-    ```
-
-    Once re-provisioning is complete, restart the cluster with
-
-    ```
-    vagrant reload
+    vagrant reload --provision
     ```
 
 3) Finally, you need to unseal the Vault instance on each node. This is required every time the service is started up. Head back to the Vault UI on each node at:
@@ -97,7 +91,7 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
 - http://172.16.0.102:8200
 - http://172.16.0.103:8200
 
-...enter the Key 1 (base64) value. Log in with the initial root token on node 1 (http://172.16.0.101:8200) to access the full Vault UI.
+...enter the Key 1 (base64) value. Log in with the initial root token on the master Vault node to access the full Vault UI (the one not displaying the standyby node message on the sign in page).
 
 ### Initial cluster snapshot
 
@@ -132,16 +126,24 @@ Firstly, setup a Vault address environment variable - `export VAULT_ADDR=http://
 
 - Authenticate/login to vault (using root token): `vault login` (enter root token at prompt)
 - List authentication methods: `vault auth list`
+- List a users details: `vault read auth/userpass/users/[username]`
 
 ### Setting up a Vault user
 
-Log into the Vault UI (http://172.16.0.101:8200) with the root token...
+Log into Vault, either:
+ - Via the UI on the master node with the root token (http://172.16.0.{1-3}:8200)
+ - Or via the command line (see above) with the root token
 
-1) Enable the username/password authentication method: __Access__ -> __Auth Methods__ -> Enable new method -> Username & Password (accept the defaults)
+1) Enable the username/password authentication method:
+  - UI: __Access__ -> __Auth Methods__ -> Enable new method -> Username & Password (accept the defaults)
+  - CLI: `vault auth enable userpass`
 
-2) Create a new entity: __Access__ -> __Entities__ -> Create entity (again accept the defaults)
+2) Create a new admin user:
+ - CLI: `vault write auth/userpass/users/testuser password=foo policies=admins`
 
-3) Create a new alias for this entity: __Access__ -> __Entities__ -> Entity "..." Menu -> Create alias (supply name & select token/ auth backend)
+3) Login with this user:
+ - UI: __Master Vault Node__ -> __Userpass__
+ - CLI: `vault login -method=userpass username=testuser`
 
 [[Set user password]]
 
