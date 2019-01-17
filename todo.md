@@ -37,8 +37,5 @@ DNSMasq:
         network_interface = "[interface, e.g. enp0s3]"
       }
       ```
-2. Vault setup ✔
-  - Options:
-    - Do manually (see README)
-    - Run in dev mode (networking issues, will it cluster?)
-  - Solution: configure manually & document in README
+2. Nomad (HTTP) UI binding to both frontend & backend addresses (172.{16/30}.0.x)
+  - Desired: UI should be bound to frontend address only (172.16.0.x)

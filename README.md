@@ -99,7 +99,7 @@ Now you have a fully initialised cluster you may want to take a snapshot of each
 
 ### Local DNS
 
-To resolve services residing on the cluster, some form of DNS will have to be setup. The simplest approach (at least on Linux) is to use DNSMasq. It is [simple to setup (Ubuntu 18.04)](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04). The following config should work well enough:
+To resolve any services you create on the cluster, some form of (local) DNS will be needed. The simplest approach (at least on Linux) is to use DNSMasq. It is [simple to setup (Ubuntu 18.04)](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04). The following config should work well enough:
 
 ```
 port=53
@@ -108,10 +108,10 @@ listen-address=127.0.0.1
 bind-interfaces
 server=[your upstream DNS server, e.g 8.8.8.8 for Google]
 
-# Use cluster (Consul) DNS
-server=/service.devcluster/172.16.0.101
-server=/service.devcluster/172.16.0.102
-server=/service.devcluster/172.16.0.103
+# Cluster domain
+address=/.devcluster/172.16.0.101
+#address=/.devcluster/172.16.0.102
+#address=/.devcluster/172.16.0.103
 
 # Per node cluster access
 address=/.node-1.devcluster/172.16.0.101
