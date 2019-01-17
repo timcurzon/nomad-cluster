@@ -106,8 +106,17 @@ port=53
 interface=lo
 listen-address=127.0.0.1
 bind-interfaces
-server=[your upstream DNS server]
-address=/devcluster/172.16.0.101
+server=[your upstream DNS server, e.g 8.8.8.8 for Google]
+
+# Use cluster (Consul) DNS
+server=/service.devcluster/172.16.0.101
+server=/service.devcluster/172.16.0.102
+server=/service.devcluster/172.16.0.103
+
+# Per node cluster access
+address=/.node-1.devcluster/172.16.0.101
+address=/.node-2.devcluster/172.16.0.102
+address=/.node-3.devcluster/172.16.0.103
 ```
 
 Remember to update the address setting if you change the cluster domain.
@@ -157,8 +166,6 @@ Ensure you are logged into Vault (with the root token), then:
 
 In order to create & use per service certificates, we need to generate a root certificate, and before we can do that we need to enable the PKI secrets engine in Vault (see [Vault secret engines](https://www.vaultproject.io/docs/secrets/index.html)).
 
-NOTE: by default we're using the default cluster name of "devcluster" in this guide.
-
 So, ensure you are logged into Vault (with the root token), then:
 
 1) Enable the PKI secrets engine:
@@ -198,7 +205,11 @@ The (public) CA certificate can the be downloaded the Vault master node, eg: `cu
 
 ## Customisation
 
-The SaltStack pillar file `saltstack/pillar/overrides.sls.example` contains explanations & examples of common configuration values you might want to override.
+The SaltStack pillar file `saltstack/pillar/overrides.sls.example` contains explanations & examples of common configuration values you might want to override. Make a copy of the example file, name it `overrides.sls` & edit accordingly to override default pillar values.
+
+### Cluster name
+
+This guide uses the default cluster name (which is "devcluster").
 
 ## Notes
 
