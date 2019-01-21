@@ -69,6 +69,8 @@ Check out the Fabio job status in the Nomad UI, then check the Fabio UI:
 
 This step is optional, but is critical if you want to play around with setting up SSL/TLS services.
 
+*Note that the 3 Vault instances are provisioned by Nomad (in Docker containers). In addition the Vault binary is available on each cluster node to allow CLI interaction.*
+
 To start up __Vault__, SSH into node-1, then...
 
 ```
@@ -77,21 +79,26 @@ nomad run /services/vault.nomad
 
 Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646/ui/jobs/vault`. Once the job is running (all allocations successful)...
 
-1) Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize" (note these values are *not* acceptable in production environment). Download / note down the "Initial root token" & "Key 1" values
+1) Initialise vault:
+    - UI: Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize"
+    - CLI: SSH into node-1 then `vault operator init -key-shares=1 -key-threshold=1 --address http://front.this.node.devcluster:8200`
+    - Download or note down the "Initial root token" & "Key 1" values.
 
-2) Now you have the root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant reload with provision (this allows Nomad to use Vault)...
+2) Now you have a root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant reload with provision (this allows Nomad to use Vault)...
 
     ```
     vagrant reload --provision
     ```
 
-3) Finally, you need to unseal the Vault instance on each node. This is required every time the service is started up. Head back to the Vault UI on each node at:
+3) Finally, you need to unseal the Vault instance on each node. This is required every time the service is started up.
+    - UI: Head back to the Vault UI on each node at:
+      - http://172.16.0.101:8200
+      - http://172.16.0.102:8200
+      - http://172.16.0.103:8200
+      - ..enter the Key 1 (base64) value. Log in with the initial root token on the master Vault node to access the full Vault UI (the one not displaying the standyby node message on the sign in page).
+    - CLI: SSH into each cluster node in turn and run `vault operator unseal --address http://front.this.node.devcluster:8200`, enter the unseal Key 1 as prompted
 
-- http://172.16.0.101:8200
-- http://172.16.0.102:8200
-- http://172.16.0.103:8200
-
-...enter the Key 1 (base64) value. Log in with the initial root token on the master Vault node to access the full Vault UI (the one not displaying the standyby node message on the sign in page).
+__Note these values are *not* acceptable in production environment). You should also refer to the [Vault production hardening docs](https://learn.hashicorp.com/vault/operations/production-hardening.html) to learn how to harden Vault appropriately.__
 
 ### Initial cluster snapshot
 
@@ -127,7 +134,7 @@ Remember to update the address setting if you change the cluster domain.
 
 [[TODO: Start up example unsecured service]]
 
-[[TODO: Install Vault binary or use version on the nodes]]
+Note that Vault binary is available on each cluster node (`/usr/local/sbin/vault`) to allow CLI interaction. Vault environment variables have been defined to make this straightforward.
 
 ### Useful Vault CLI commands
 

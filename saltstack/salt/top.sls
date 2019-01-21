@@ -7,6 +7,7 @@ base:
     - consul
     - docker
     - nomad
+    - vault
 
 #  'node-1*':
 #    - jobs
