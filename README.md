@@ -6,7 +6,29 @@ The Nomad dev cluster is a virtualised self-contained learning environment aimed
 
 Further information on Nomad can be found in the [official introductory](https://www.nomadproject.io/intro/index.html) documentation.
 
+## Index
+
+- [Getting started](#getting-started)
+  - [Requirements](#requirements)
+  - [First time startup](#first-time-startup)
+  - [Machine access](#machine-access)
+  - [Basic services](#basic-services)
+  - [Starting up Vault](#starting-up-vault)
+  - [Initial cluster snapshot](#initial-cluster-snapshot)
+  - [Local DNS](#local-dns)
+- [Customisation](#customisation)
+  - [Cluster name](#cluster-name)
+- [Notes](#notes)
+  - [Networking](#networking)
+  - [Saltstack](#saltstack)
+- [Further Exercises](#further-exercises)
+- [Links & References](#links)
+
+<a id="getting-started"></a>
+
 ## Getting started
+
+<a id="requirements"></a>
 
 ### Requirements
 
@@ -16,6 +38,8 @@ Requirements are pretty basic. You'll need the following locally installed:
 2) [Vagrant](https://www.vagrantup.com/)
 
 Both are available for common OS's (Linux, macOS, Windows).
+
+<a id="first-time-startup"></a>
 
 ### First time startup
 
@@ -34,6 +58,8 @@ vagrant up
 
 At this point, 3 almost identical virtualbox machines will be created, each representing a single node in the cluster.
 
+<a id="machine-access"></a>
+
 ### Machine access
 
 Each machine is named _node-[number]_ (where _[number]_ is 1-3), and can be accessed via:
@@ -48,9 +74,9 @@ The following service UIs are initially available:
 
 Note that as we haven't set up any DNS for the cluster, all access is direct via IP address. DNS will be covered later.
 
-### Basic services
+<a id="basic-services"></a>
 
-- Vault: `http://172.16.0.10{1-3}:8600`
+### Basic services
 
 Now you have a running cluster, it's time to start up some services.
 
@@ -64,6 +90,8 @@ Check out the Fabio job status in the Nomad UI, then check the Fabio UI:
 
 - Nomad job UI: `http://172.16.0.101:4646/ui/jobs/fabio`
 - Fabio UI: `http://172.16.0.101:9998`
+
+<a id="starting-up-vault"></a>
 
 ### Starting up Vault
 
@@ -81,7 +109,7 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
 
 1) Initialise vault:
     - UI: Access the first Vault UI at http://172.16.0.101:8200, enter 1 for both the "Key Shares" and "Key Threshold" values & click "Initialize"
-    - CLI: SSH into node-1 then `vault operator init -key-shares=1 -key-threshold=1 --address http://front.this.node.devcluster:8200`
+    - CLI: SSH into node-1 then `vault operator init -key-shares=1 -key-threshold=1`
     - Download or note down the "Initial root token" & "Key 1" values.
 
 2) Now you have a root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant reload with provision (this allows Nomad to use Vault)...
@@ -96,13 +124,17 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
       - http://172.16.0.102:8200
       - http://172.16.0.103:8200
       - ..enter the Key 1 (base64) value. Log in with the initial root token on the master Vault node to access the full Vault UI (the one not displaying the standyby node message on the sign in page).
-    - CLI: SSH into each cluster node in turn and run `vault operator unseal --address http://front.this.node.devcluster:8200`, enter the unseal Key 1 as prompted
+    - CLI: SSH into each cluster node in turn and run `vault operator unseal`, enter the unseal Key 1 as prompted
 
 __Note these values are *not* acceptable in production environment). You should also refer to the [Vault production hardening docs](https://learn.hashicorp.com/vault/operations/production-hardening.html) to learn how to harden Vault appropriately.__
+
+<a id="initial-cluster-snapshot"></a>
 
 ### Initial cluster snapshot
 
 Now you have a fully initialised cluster you may want to take a snapshot of each node for when you need to revert to a fresh state (see [Virtual box user manual](https://www.virtualbox.org/manual/UserManual.html), & the [snapshot section](https://www.virtualbox.org/manual/ch01.html#snapshots)).
+
+<a id="local-dns"></a>
 
 ### Local DNS
 
@@ -128,97 +160,23 @@ address=/.node-3.devcluster/172.16.0.103
 
 Remember to update the address setting if you change the cluster domain.
 
-## Setting up an HTTPS service with Vault & Fabio
-
-### Pre-requisites
-
-[[TODO: Start up example unsecured service]]
-
-Note that Vault binary is available on each cluster node (`/usr/local/sbin/vault`) to allow CLI interaction. Vault environment variables have been defined to make this straightforward.
-
-### Useful Vault CLI commands
-
-Firstly, setup a Vault address environment variable - `export VAULT_ADDR=http://172.16.0.101:8200`. Add this to your preferred shell enviroment configuration at your leisure.
-
-- Authenticate/login to vault (using root token): `vault login` (enter root token at prompt)
-- List authentication methods: `vault auth list`
-- List a users details: `vault read auth/userpass/users/[username]`
-
-### Logging into Vault
-
-To log into Vault, you can either:
- - Log in via the UI on the master node with the root token (http://172.16.0.{1-3}:8200)
- - Or log in via the command line: `vault login` (enter root token at prompt)
-
-You'll then be able to use the UI / CLI Vault binary.
-
-### Setting up a Vault user
-
-Ensure you are logged into Vault (with the root token), then:
-
-1) Enable the username/password authentication method:
-  - UI: __Access__ -> __Auth Methods__ -> Enable new method -> Username & Password (accept the defaults)
-  - CLI: `vault auth enable userpass`
-
-2) Create a new admin user:
- - CLI: `vault write auth/userpass/users/testuser password=foo policies=admins`
-
-[[TODO: Add role definition / ACL]]
-
-3) Login with this user:
- - UI: __Master Vault Node__ -> __Userpass__
- - CLI: `vault login -method=userpass username=testuser`
-
-### Create a root certificate
-
-In order to create & use per service certificates, we need to generate a root certificate, and before we can do that we need to enable the PKI secrets engine in Vault (see [Vault secret engines](https://www.vaultproject.io/docs/secrets/index.html)).
-
-So, ensure you are logged into Vault (with the root token), then:
-
-1) Enable the PKI secrets engine:
-  - UI: __Master Vault Node__ -> __Secrets__ -> Enable new engine -> PKI Certificates -> Next -> Enable engine (set Max Lease TTL to 8760 hours)
-  - CLI: `vault secrets enable pki; vault secrets tune -max-lease-ttl=8760h pki`
-
-2) Create the root CA certificate:
-  - UI: __Master Vault Node__ -> __Secrets__ -> pki -> Certificates -> Configure -> Configure CA
-    - Common name: devcluster
-    - Options -> TTL: 8760 hours
-    - Save
-  - CLI: `vault write pki/root/generate/internal common_name=devcluster ttl=8760h`
-
-3) Create the CRL / issuing certificate locations:
- - UI: __Master Vault Node__ -> __Secrets__ -> pki -> Configuration -> Configure -> URLs
-   - Issuing certificates: http://172.168.0.101:8200/v1/pki/ca -> Add
-   - CRL Distribution Points: http://172.168.0.101:8200/v1/pki/crl -> Add
-   - Save
- - CLI: `vault write pki/config/urls issuing_certificates="http://172.168.0.101:8200/v1/pki/ca" crl_distribution_points="http://172.168.0.101:8200/v1/pki/crl"`
-
-4) Add a role that allows issuing of certificates for <service>.devcluster (or whatever your cluster is named):
- - CLI: `vault write pki/roles/service.devcluster allowed_domains="service.devcluster" allow_any_name="true" max_ttl="8760h"`
-
-The (public) CA certificate can the be downloaded the Vault master node, eg: `curl http://172.16.0.101:8200/v1/pki/ca/pem`
-
-### Create a service certificate
-
-[[TODO]]
-
-### Setup service with certificate
-
-[[TODO: Add to Consul]]
-
-[[TODO: explain that Fabio will use cert]]
-
-[[TODO: Verify service]]
+<a id="customisation"></a>
 
 ## Customisation
 
 The SaltStack pillar file `saltstack/pillar/overrides.sls.example` contains explanations & examples of common configuration values you might want to override. Make a copy of the example file, name it `overrides.sls` & edit accordingly to override default pillar values.
 
+<a id="cluster-name"></a>
+
 ### Cluster name
 
 This guide uses the default cluster name (which is "devcluster").
 
+<a id="notes"></a>
+
 ## Notes
+
+<a id="networking"></a>
 
 ### Networking
 
@@ -239,6 +197,8 @@ There are also two bridges:
 
 Service to service (container to container) addressing as achieved through fan networking - see [Fan Networking on Ubuntu](https://wiki.ubuntu.com/FanNetworking) for technical details. In summary though, it allows up to 254 uniquely addressable services per node, each routeable from any node in the cluster.
 
+<a id="saltstack"></a>
+
 ### SaltStack
 
 SaltStack is a configuration management tool, a bit like Puppet or Ansible. It is triggered by Vagrant upon provisioning to configure each node (it has a built in SaltStack provisioner). To perform any degree of node customisation, the state & pillar files (configuration actions & key value data respectively) are where you'll likely begin.
@@ -251,6 +211,14 @@ To give a very brief overview of operations - SaltStack starts with processing t
 
 Please refer to the [docs](https://docs.saltstack.com/en/latest/) for further information.
 
+<a id="further-exercises"></a>
+
+## Further Exercises
+
+- [Setting up an HTTPS service with Vault & Fabio](docs/https-service.md)
+
+<a id="links"></a>
+
 ## Links & References
 
 - [Consul](https://www.consul.io/) ([docs](https://www.consul.io/docs/))
@@ -262,6 +230,6 @@ Please refer to the [docs](https://docs.saltstack.com/en/latest/) for further in
 - [Vault](https://www.vaultproject.io/) ([docs](https://www.vaultproject.io/docs/install/))
 - [Virtualbox](https://www.virtualbox.org/) ([docs](https://www.virtualbox.org/manual/UserManual.html))
 
-### Local DNS
+__Local DNS setup__
 
 - [DNSMasq setup in Ubuntu 18.04](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04)
