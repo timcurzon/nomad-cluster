@@ -43,13 +43,13 @@ Both are available for common OS's (Linux, macOS, Windows).
 
 ### First time startup
 
-Once you have the requirements installed, check out this repo:
+Once you have the requirements installed, enure you've checke out the repo:
 
 ```bash
-git clone [repoUrl]
+git clone https://github.com/timcurzon/nomad-cluster.git
 ```
 
-Then move into the repo directory and start the cluster...
+Move into the repo directory and start up the cluster...
 
 ```bash
 cd [repoDir]
@@ -65,14 +65,14 @@ At this point, 3 almost identical virtualbox machines will be created, each repr
 Each machine is named _node-[number]_ (where _[number]_ is 1-3), and can be accessed via:
 
 - __SSH__ simply `vagrant ssh node-{1-3}`
-- __IP Address__ `172.16.0.10{1-3}` (private, accessible only to the host machine)
+- __IP Address__ `172.16.0.10{1-3}` (private, accessible only on the host machine)
 
 The following service UIs are initially available:
 
 - Nomad: `http://172.16.0.10{1-3}:4646`
 - Consul: `http://172.16.0.10{1-3}:8500`
 
-Note that as we haven't set up any DNS for the cluster, all access is direct via IP address. DNS will be covered later.
+Note that as we haven't set up any DNS for the cluster, all access is direct via IP address. DNS options are covered in the [local DNS](#local-dns) section.
 
 <a id="basic-services"></a>
 
@@ -80,13 +80,13 @@ Note that as we haven't set up any DNS for the cluster, all access is direct via
 
 Now you have a running cluster, it's time to start up some services.
 
-Firstly, __Fabio__. SSH into node-1, then...
+Firstly, __Fabio__, the cluster edge router. SSH into node-1, then...
 
 ```
 nomad run /services/fabio.nomad
 ```
 
-Check out the Fabio job status in the Nomad UI, then check the Fabio UI:
+Check out the Fabio job status in the Nomad UI (3 instances should be running), then check the Fabio UI:
 
 - Nomad job UI: `http://172.16.0.101:4646/ui/jobs/fabio`
 - Fabio UI: `http://172.16.0.101:9998`
@@ -97,7 +97,7 @@ Check out the Fabio job status in the Nomad UI, then check the Fabio UI:
 
 This step is optional, but is critical if you want to play around with setting up SSL/TLS services.
 
-*Note that the 3 Vault instances are provisioned by Nomad (in Docker containers). In addition the Vault binary is available on each cluster node to allow CLI interaction.*
+*Note that the 3 Vault instances are provisioned by Nomad (in Docker containers). In addition the Vault binary is available on each cluster node (along with appropriate environement variables) to allow CLI interaction.*
 
 To start up __Vault__, SSH into node-1, then...
 
@@ -126,7 +126,7 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
       - ..enter the Key 1 (base64) value. Log in with the initial root token on the master Vault node to access the full Vault UI (the one not displaying the standyby node message on the sign in page).
     - CLI: SSH into each cluster node in turn and run `vault operator unseal`, enter the unseal Key 1 as prompted
 
-__Note these values are *not* acceptable in production environment). You should also refer to the [Vault production hardening docs](https://learn.hashicorp.com/vault/operations/production-hardening.html) to learn how to harden Vault appropriately.__
+__DISCLAIMER: these values are *not* acceptable for a production environment, you should also refer to the [Vault production hardening docs](https://learn.hashicorp.com/vault/operations/production-hardening.html) to learn how to harden Vault appropriately.__
 
 <a id="initial-cluster-snapshot"></a>
 
@@ -148,7 +148,7 @@ bind-interfaces
 server=[your upstream DNS server, e.g 8.8.8.8 for Google]
 
 # Cluster domain
-address=/.devcluster/172.16.0.101
+address=/.devcluster/172.16.0.101 # No wildcard round-robin DNS, route via node-1
 #address=/.devcluster/172.16.0.102
 #address=/.devcluster/172.16.0.103
 
@@ -180,34 +180,36 @@ This guide uses the default cluster name (which is "devcluster").
 
 ### Networking
 
-Networking is setup to approximately resemble a production environment, where a cluster node has 2 adapters - one public, and one private dedicated to inter-cluster communication.
+Networking is setup to approximately resemble a production environment, where a cluster node has 2 adapters - one public, and one private dedicated to intra-cluster communication.
 
-Due to the virtualised environment requirements, networking implementation is slightly more involved. Each node has 3 network interfaces, with 1 is available outside the VM.
+Due to the virtualised environment requirements, the actual networking implementation is a little more complicated. Each node has 3 network interfaces, with 1 available outside the VM.
 
 *Note that __{1-3}__ represents the cluster node number*
 
 - __10.0.2.*x*__ Auto-provisioned by Vagrant, used for outbound network access via NAT
-- __172.16.0.10{1-3}__ External & internal interface, used for accessing cluster services
-- __172.16.30.{1-3}__ Internal node to node interface (dedicated to Nomad server & cluster service traffic - fan network bridge routes over this interface)
+- __172.16.0.10{1-3}__ External (& internal) interface, for accessing cluster services from the outside
+- __172.16.30.{1-3}__ Internal node to node interface, dedicated to Nomad server & cluster service traffic (the fan network bridge routes over this interface)
 
 There are also two bridges:
 
-- __172.31.{1-3}.*n*__ Fan networking - Docker assign on this range to containers. *n* is the per service IP (up to 254 services per cluster node)
+- __172.31.{1-3}.*n*__ Fan networking - Docker assigns IPs on this range to containers 
+  - Where __{1-3}__ is the cluster node number
+  - __*n*__ is the per service IP (up to 254 services per cluster node)
 - __172.17.0.1__ Default docker0 bridge (unused)
 
-Service to service (container to container) addressing as achieved through fan networking - see [Fan Networking on Ubuntu](https://wiki.ubuntu.com/FanNetworking) for technical details. In summary though, it allows up to 254 uniquely addressable services per node, each routeable from any node in the cluster.
+Service to service (container to container) addressing as achieved through fan networking - see [Fan Networking on Ubuntu](https://wiki.ubuntu.com/FanNetworking) for technical details. In summary, it allows up to 254 uniquely addressable services per node, each routeable from any node in the cluster.
 
 <a id="saltstack"></a>
 
 ### SaltStack
 
-SaltStack is a configuration management tool, a bit like Puppet or Ansible. It is triggered by Vagrant upon provisioning to configure each node (it has a built in SaltStack provisioner). To perform any degree of node customisation, the state & pillar files (configuration actions & key value data respectively) are where you'll likely begin.
+SaltStack is a configuration management tool, a bit like Puppet or Ansible. It is triggered by Vagrant upon provisioning to configure each node (Vagrant has a built in SaltStack provisioner). To perform any non-trivial node customisation, the state & pillar files (configuration actions & key value data respectively) are where you'll likely begin (note the [customisation](#customisation) section above though).
 
 SaltStack file overview:
 - `saltstack/pillar` - configuration data
 - `saltstack/salt` - configuration actions (services with a more complicated setup may have a directory of support files)
 
-To give a very brief overview of operations - SaltStack starts with processing the `top.sls` state file which in turn references other state files that are run on the specified nodes, e.g. '*' means run on all nodes (note the node name is specified by Vagrant - see node.vm.hostname definition). State files are specified per service / common actions.
+To give a very brief overview of operations - SaltStack starts with processing the `top.sls` state file which in turn references other state files that are run on the specified nodes, e.g. '*' means run on all nodes (note the node name is specified by Vagrant - see node.vm.hostname definition). The state files for the cluster are specified per service / common action.
 
 Please refer to the [docs](https://docs.saltstack.com/en/latest/) for further information.
 
