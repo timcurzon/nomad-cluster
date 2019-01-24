@@ -4,7 +4,7 @@ job "nginxtest" {
   type = "service"
 
   group "web" {
-    count = 2
+    count = 3
 
     update {
       max_parallel = 1

@@ -20,7 +20,7 @@ job "fabio" {
         image = "fabiolb/fabio:latest"
 				port_map {
 					http = 80
-					#https = 443
+					https = 443
 					admin = 9998
 				}
       }
@@ -44,10 +44,10 @@ job "fabio" {
 			env {
 				FABIO_registry_consul_addr = "front.this.node.${meta.cluster-domain}:8500"
 				FABIO_registry_consul_register_enabled = "false"
-				# FABIO_proxy_cs = "cs=service.${meta.cluster-domain};type=consul;cert=http://front.this.node.${meta.cluster-domain}:8500/v1/kv/fabio/cert"
-				# FABIO_proxy_addr = ":80, :443;cs=service.${meta.cluster-domain}"
-        FABIO_proxy_addr = ":80"
-        ENV_CHANGEME = "trigger job change 003"
+				FABIO_proxy_cs = "cs=service.${meta.cluster-domain};type=consul;cert=http://front.this.node.${meta.cluster-domain}:8500/v1/kv/fabio/cert"
+				FABIO_proxy_addr = ":80, :443;cs=service.${meta.cluster-domain}"
+        # FABIO_proxy_addr = ":80"
+        ENV_CHANGEME = "trigger job change 001"
       }
 
       resources {
@@ -59,9 +59,9 @@ job "fabio" {
 					port "http" {
 						static = 80
 					}
-					#port "https" {
-					#	static = 443
-					#}
+					port "https" {
+						static = 443
+					}
 					port "admin" {
 						static = 9998
 					}
