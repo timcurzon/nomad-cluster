@@ -23,8 +23,8 @@ You'll need some form of local DNS setup to access the test service we'll create
 We need somewhere to store the generated service certificates. Head over the to Consul UI at `http:\\172.16.0.101:8500` to setup the certificate key/value store path:
 
 - __Key/Value__ -> Create
-    - Key or folder: *fabio/cert/*
-    - Save
+  - Key or folder: *fabio/cert/*
+  - Save
 
 ### Vault CLI
 
@@ -41,8 +41,9 @@ Firstly, setup a Vault address environment variable - `export VAULT_ADDR=http://
 ## Logging into Vault
 
 To log into Vault, you can either:
- - Log in via the UI on the master node with the root token (http://172.16.0.{1-3}:8200)
- - Or log in via the command line: `vault login` (enter root token at prompt)
+
+- Log in via the UI on the master node with the root token (http://172.16.0.{1-3}:8200)
+- Or log in via the command line: `vault login` (enter root token at prompt)
 
 You'll then be able to use the UI / CLI Vault binary.
 
@@ -54,7 +55,7 @@ So, ensure you are logged into Vault (with the root token), then:
 
 1. Enable the PKI secrets engine:
     - UI: __Master Vault Node__ -> __Secrets__ -> Enable new engine -> PKI Certificates -> Next -> Enable engine
-        - Max Lease TTL: *8760 hours*
+      - Max Lease TTL: *8760 hours*
     - CLI: `vault secrets enable pki; vault secrets tune -max-lease-ttl=8760h pki`
 
 2. Create the root CA certificate:
@@ -81,9 +82,9 @@ The (public) CA certificate can the be downloaded the Vault master node, eg: `cu
 We'll now create a certificate for the Nginx service we started earlier (*nginxtest.service.devcluster*), signed by the previously created root certificate. Ensure you are logged into Vault (with the root token), then:
 
 - UI: __Master Vault Node__ -> __Secrets__ -> pki -> service.devcluster
-    - Common name: *nginxtest.service.devcluster*
-    - TTL: *2232 hours*
-    - Generate
+  - Common name: *nginxtest.service.devcluster*
+  - TTL: *2232 hours*
+  - Generate
 - CLI: `vault write pki/issue/service.devcluster common_name=nginxtest.service.devcluster ttl=2232h`
 - Ensure you copy the resulting certificate data.
 
@@ -92,7 +93,7 @@ We'll now create a certificate for the Nginx service we started earlier (*nginxt
 Fabio (the edge router) is already configured to use Consul as a certificate store (under the /fabio/cert KV path), so all we need to do is add our new cert (in PEM format) via the Consul UI at `http:\\172.16.0.101:8500`:
 
 1. In order to convert the generated service certificate output into a PEM format, concatenate the private key, certificate and issuing CA values (each on a new line):
-    ```
+    ```xml
     <private_key>
     <certificate>
     <issuing_ca>
@@ -102,8 +103,12 @@ Fabio (the edge router) is already configured to use Consul as a certificate sto
     - Value: <*certificate in PEM format*>
     - Save
 
-3. Verify the service is now accessible over HTTPS - head to `https://nginxtest.service.devcluster`. Your browser will show an "insecure connection" warning as the cert we generated is not yet trusted by your OS (we'll deal with this shortly). Use the browser to inspect the offered cert, and you can verify its serial number matches the one you just created. 
+3. Verify the service is now accessible over HTTPS - head to `https://nginxtest.service.devcluster`. Your browser will show an "insecure connection" warning as the cert generated is not yet trusted by your OS/browser (see below). For now, use the browser to inspect the offered cert - you can verify its serial number matches the one you just created.
 
 ## Get the OS to trust your cluster root certificate
 
-[[TODO: Add root certificate to OS keychain / TLS cert store]]
+The guides linked will guide you through adding your root cert to the OS & browser certificate stores on all major OS's.
+
+- Linux: https://thomas-leister.de/en/how-to-import-ca-root-certificate/
+- OS X: https://bounca.org/tutorials/install_root_certificate.html
+- Windows: https://thomas-leister.de/en/how-to-import-ca-root-certificate/

@@ -82,7 +82,7 @@ Now you have a running cluster, it's time to start up some services.
 
 Firstly, __Fabio__, the cluster edge router. SSH into node-1, then...
 
-```
+```bash
 nomad run /services/fabio.nomad
 ```
 
@@ -101,7 +101,7 @@ This step is optional, but is critical if you want to play around with setting u
 
 To start up __Vault__, SSH into node-1, then...
 
-```
+```bash
 nomad run /services/vault.nomad
 ```
 
@@ -114,7 +114,7 @@ Check the Vault job allocation status in the Nomad UI: `http://172.16.0.101:4646
 
 2) Now you have a root token, make a copy of the SaltStack overrides example file & name it `overrides.sls` (located at `saltstack/pillar/overrides.sls.example`). Replace the placeholder string "[[insert vault root token value here]]" with the root token value. On the host machine then trigger a Vagrant reload with provision (this allows Nomad to use Vault)...
 
-    ```
+    ```bash
     vagrant reload --provision
     ```
 
@@ -206,6 +206,7 @@ Service to service (container to container) addressing as achieved through fan n
 SaltStack is a configuration management tool, a bit like Puppet or Ansible. It is triggered by Vagrant upon provisioning to configure each node (Vagrant has a built in SaltStack provisioner). To perform any non-trivial node customisation, the state & pillar files (configuration actions & key value data respectively) are where you'll likely begin (note the [customisation](#customisation) section above though).
 
 SaltStack file overview:
+
 - `saltstack/pillar` - configuration data
 - `saltstack/salt` - configuration actions (services with a more complicated setup may have a directory of support files)
 
@@ -232,6 +233,6 @@ Please refer to the [docs](https://docs.saltstack.com/en/latest/) for further in
 - [Vault](https://www.vaultproject.io/) ([docs](https://www.vaultproject.io/docs/install/))
 - [Virtualbox](https://www.virtualbox.org/) ([docs](https://www.virtualbox.org/manual/UserManual.html))
 
-__Local DNS setup__
+### Local DNS setup
 
 - [DNSMasq setup in Ubuntu 18.04](https://askubuntu.com/questions/1032450/how-to-add-dnsmasq-and-keep-systemd-resolved-18-04)
