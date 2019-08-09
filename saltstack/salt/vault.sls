@@ -1,8 +1,8 @@
 vault install:
   archive.extracted:
     - name: /usr/local/sbin
-    - source: https://releases.hashicorp.com/vault/1.0.2/vault_1.0.2_linux_amd64.zip
-    - source_hash: 5549714c24b61ea77a7afb30e1fbff6ec596cfd39dab7a2e6cf7e71432d616cc
+    - source: https://releases.hashicorp.com/vault/0.11.5/vault_0.11.5_linux_amd64.zip
+    - source_hash: 5230377dd8c214b274261a1474ee484a43622cdfa162458311ef11bb8c31b5b8
     - source_hash_update: True
     - enforce_toplevel: False
 

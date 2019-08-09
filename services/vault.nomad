@@ -23,7 +23,7 @@ job "vault" {
     task "vault" {
       driver = "docker"
       config {
-        image = "vault:latest"
+        image = "vault:0.11.5"
         command = "vault"
         args = [
           "server",
