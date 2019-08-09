@@ -99,7 +99,7 @@ Fabio (the edge router) is already configured to use Consul as a certificate sto
     <issuing_ca>
     ```
 2. __Key/Value__ -> fabio -> cert -> Create
-    - Key or folder: *nginxtest.service.devcluster*
+    - Key or folder (`.pem` extension is added to the service name): *nginxtest.service.devcluster.pem*
     - Value: <*certificate in PEM format*>
     - Save
 
