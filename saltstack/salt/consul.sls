@@ -1,8 +1,8 @@
 consul install:
   archive.extracted:
     - name: /usr/local/sbin
-    - source: https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
-    - source_hash: a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac
+    - source: https://releases.hashicorp.com/consul/1.5.3/consul_1.5.3_linux_amd64.zip
+    - source_hash: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
     - source_hash_update: True
     - enforce_toplevel: False
     - if_missing: /usr/local/sbin/consul
